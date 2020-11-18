@@ -1,11 +1,11 @@
-import Entity from '../entity/entity'
+import Entity from '../entity/entity';
 
 export default class BaseComponent {
-  entity: Entity
+  entity: Entity;
 
   constructor() {}
 
   attach(entity: Entity) {
-    this.entity = entity
+    this.entity = entity;
   }
 }
