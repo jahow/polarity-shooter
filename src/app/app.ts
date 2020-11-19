@@ -2,6 +2,7 @@ import Entity from '../entity/entity';
 import { init as initEngine, run } from './engine';
 import RenderSystem from '../system/system.render';
 import GroundMeshComponent from '../component/component.mesh.ground';
+import ActorMeshComponent from '../component/component.mesh.actor';
 
 initEngine();
 
@@ -17,6 +18,7 @@ function addEntity(entity: Entity) {
 }
 
 addEntity(new Entity([new GroundMeshComponent()]));
+addEntity(new Entity([new ActorMeshComponent()]));
 
 export function start() {
   run(() => {

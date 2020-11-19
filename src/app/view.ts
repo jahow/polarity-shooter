@@ -6,7 +6,7 @@ import { getScene } from './engine';
 let camera: UniversalCamera;
 
 export function initView() {
-  camera = new UniversalCamera('main', new Vector3(0, 20, -5), getScene());
+  camera = new UniversalCamera('main', new Vector3(0, 20, -15), getScene());
   camera.setTarget(new Vector3(0, 0, 0));
 }
 

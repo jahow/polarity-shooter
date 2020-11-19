@@ -8,12 +8,7 @@ export default class GroundMeshComponent extends BaseMeshComponent {
     super();
 
     this.mesh = new Mesh('ground mesh')
-      .pushSimpleQuad({
-        minX: -5,
-        maxX: 5,
-        minZ: -5,
-        maxZ: 5,
-      })
+      .pushQuad([-5, 0, -5], [10, 0, 0], [0, 0, 10], [0.6, 0.6, 0.6, 1])
       .commit();
   }
 

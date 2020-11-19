@@ -86,124 +86,59 @@ export default class Mesh extends BJSMesh {
     return this;
   }
 
-  pushSimpleQuad(properties: {
-    minX: number;
-    maxX: number;
-    minZ: number;
-    maxZ: number;
-    y?: number;
-    backwards?: boolean;
-    color?: Color;
-    minU?: number;
-    maxU?: number;
-    minV?: number;
-    maxV?: number;
-  }) {
+  pushQuad(
+    startPos: Coords,
+    vector1: Coords,
+    vector2: Coords,
+    color?: Color,
+    minU?: number,
+    maxU?: number,
+    minV?: number,
+    maxV?: number
+  ) {
+    const color_ = color || [1, 1, 1, 1];
     this._setBaseIndex();
     this._pushPositions(
-      properties.minX,
-      properties.y || 0,
-      properties.minZ,
-      properties.maxX,
-      properties.y || 0,
-      properties.minZ,
-      properties.maxX,
-      properties.y || 0,
-      properties.maxZ,
-      properties.minX,
-      properties.y || 0,
-      properties.maxZ
-    );
-    const color = properties.color || [1, 1, 1, 1];
-    this._pushColors(
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3]
-    );
-    this._pushUVs(
-      properties.minU || 0,
-      properties.minV || 0,
-      properties.maxU || 0,
-      properties.minV || 0,
-      properties.maxU || 0,
-      properties.maxV || 0,
-      properties.minU || 0,
-      properties.maxV || 0
-    );
-
-    properties.backwards
-      ? this._pushIndices(0, 2, 1, 0, 3, 2)
-      : this._pushIndices(0, 1, 2, 0, 2, 3);
-
-    return this;
-  }
-
-  pushQuad(properties: {
-    startPos: Coords;
-    vector1: Coords;
-    vector2: Coords;
-    color?: Color;
-    minU?: number;
-    maxU?: number;
-    minV?: number;
-    maxV?: number;
-  }) {
-    const color = properties.color || [1, 1, 1, 1];
-    this._setBaseIndex();
-    this._pushPositions(
-      properties.startPos[0],
-      properties.startPos[1],
-      properties.startPos[2],
-      properties.startPos[0] + properties.vector1[0],
-      properties.startPos[1] + properties.vector1[1],
-      properties.startPos[2] + properties.vector1[2],
-      properties.startPos[0] + properties.vector1[0] + properties.vector2[0],
-      properties.startPos[1] + properties.vector1[1] + properties.vector2[1],
-      properties.startPos[2] + properties.vector1[2] + properties.vector2[2],
-      properties.startPos[0] + properties.vector2[0],
-      properties.startPos[1] + properties.vector2[1],
-      properties.startPos[2] + properties.vector2[2]
+      startPos[0],
+      startPos[1],
+      startPos[2],
+      startPos[0] + vector1[0],
+      startPos[1] + vector1[1],
+      startPos[2] + vector1[2],
+      startPos[0] + vector1[0] + vector2[0],
+      startPos[1] + vector1[1] + vector2[1],
+      startPos[2] + vector1[2] + vector2[2],
+      startPos[0] + vector2[0],
+      startPos[1] + vector2[1],
+      startPos[2] + vector2[2]
     );
     this._pushColors(
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      color[0],
-      color[1],
-      color[2],
-      color[3]
+      color_[0],
+      color_[1],
+      color_[2],
+      color_[3],
+      color_[0],
+      color_[1],
+      color_[2],
+      color_[3],
+      color_[0],
+      color_[1],
+      color_[2],
+      color_[3],
+      color_[0],
+      color_[1],
+      color_[2],
+      color_[3]
     );
     this._pushUVs(
-      properties.minU || 0,
-      properties.minV || 0,
-      properties.maxU || 0,
-      properties.minV || 0,
-      properties.maxU || 0,
-      properties.maxV || 0,
-      properties.minU || 0,
-      properties.maxV || 0
+      minU || 0,
+      minV || 0,
+      maxU || 0,
+      minV || 0,
+      maxU || 0,
+      maxV || 0,
+      minU || 0,
+      maxV || 0
     );
 
     this._pushIndices(0, 1, 2, 0, 2, 3);
@@ -270,6 +205,7 @@ export default class Mesh extends BJSMesh {
           normal.addInPlace(
             new Vector3(-next.z + current.z, 0, next.x - current.x).normalize()
           );
+          5, 0, 5;
         }
       }
 
@@ -298,6 +234,147 @@ export default class Mesh extends BJSMesh {
         this._pushIndices(-1, 1, 0, -1, 0, -2);
       }
     }
+
+    return this;
+  }
+
+  pushCube(center: Coords, size: [number, number, number], color?: Color) {
+    // const color_ = color;
+    // this._setBaseIndex();
+    // this._pushPositions(
+    //   center[0] - size[0],
+    //   center[1] - size[1],
+    //   center[2] - size[2],
+    //   center[0] + size[0],
+    //   center[1] - size[1],
+    //   center[2] - size[2],
+    //   center[0] + size[0],
+    //   center[1] - size[1],
+    //   center[2] + size[2],
+    //   center[0] - size[0],
+    //   center[1] - size[1],
+    //   center[2] + size[2],
+    //   center[0] - size[0],
+    //   center[1] + size[1],
+    //   center[2] - size[2],
+    //   center[0] + size[0],
+    //   center[1] + size[1],
+    //   center[2] - size[2],
+    //   center[0] + size[0],
+    //   center[1] + size[1],
+    //   center[2] + size[2],
+    //   center[0] - size[0],
+    //   center[1] + size[1],
+    //   center[2] + size[2]
+    // );
+    // this._pushColors(
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3],
+    //   color_[0],
+    //   color_[1],
+    //   color_[2],
+    //   color_[3]
+    // );
+    //
+    // this._pushIndices(0, 2, 1, 0, 3, 2);
+    // this._pushIndices(0, 4, 7, 0, 7, 3);
+    // this._pushIndices(0, 1, 5, 0, 5, 4);
+    // this._pushIndices(1, 2, 6, 1, 6, 5);
+    // this._pushIndices(2, 3, 7, 2, 7, 6);
+    // this._pushIndices(4, 5, 6, 4, 6, 7);
+
+    // X+
+    this.pushQuad(
+      [
+        center[0] + size[0] / 2,
+        center[1] + size[1] / 2,
+        center[2] - size[2] / 2,
+      ],
+      [0, -size[1], 0],
+      [0, 0, size[2]],
+      color
+    );
+    // Y+
+    this.pushQuad(
+      [
+        center[0] - size[0] / 2,
+        center[1] + size[1] / 2,
+        center[2] - size[2] / 2,
+      ],
+      [size[0], 0, 0],
+      [0, 0, size[2]],
+      color
+    );
+    // Z+
+    this.pushQuad(
+      [
+        center[0] - size[0] / 2,
+        center[1] + size[1] / 2,
+        center[2] + size[2] / 2,
+      ],
+      [size[0], 0, 0],
+      [0, -size[1], 0],
+      color
+    );
+    // X-
+    this.pushQuad(
+      [
+        center[0] - size[0] / 2,
+        center[1] + size[1] / 2,
+        center[2] - size[2] / 2,
+      ],
+      [0, 0, size[2]],
+      [0, -size[1], 0],
+      color
+    );
+    // Y-
+    this.pushQuad(
+      [
+        center[0] + size[0] / 2,
+        center[1] - size[1] / 2,
+        center[2] + size[2] / 2,
+      ],
+      [-size[0], 0, 0],
+      [0, 0, -size[2]],
+      color
+    );
+    // Z-
+    this.pushQuad(
+      [
+        center[0] - size[0] / 2,
+        center[1] - size[1] / 2,
+        center[2] - size[2] / 2,
+      ],
+      [size[0], 0, 0],
+      [0, size[1], 0],
+      color
+    );
 
     return this;
   }
