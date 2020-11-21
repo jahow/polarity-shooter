@@ -16,6 +16,7 @@ export default class RenderSystem extends BaseSystem {
       new Vector3(-0.2, -1, -0.4),
       getScene()
     );
+    light.specular = Color3.Black();
     let light2 = new DirectionalLight(
       'light2',
       new Vector3(0.2, 0.1, 0.4),

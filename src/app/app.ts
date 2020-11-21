@@ -5,11 +5,14 @@ import GroundMeshComponent from '../component/component.mesh.ground';
 import ActorMeshComponent from '../component/component.mesh.actor';
 import TransformComponent from '../component/component.transform';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import InputSystem from '../system/system.input';
+import PlayerInputComponent from '../component/component.input.player';
 
 initEngine();
 
 const entities: Entity[] = [];
 const renderSystem = new RenderSystem();
+const inputSystem = new InputSystem();
 
 function addEntity(entity: Entity) {
   if (entities.indexOf(entity) > 1) {
@@ -27,11 +30,13 @@ addEntity(
       new Vector3(0, Math.PI / 4, 0)
     ),
     new ActorMeshComponent(),
+    new PlayerInputComponent(),
   ])
 );
 
 export function start() {
   run(() => {
+    inputSystem.run(entities);
     renderSystem.run(entities);
   });
 }

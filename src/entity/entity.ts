@@ -1,5 +1,6 @@
 import BaseComponent from '../component/component.base';
 import { getUid } from '../utils/uid';
+import TransformComponent from '../component/component.transform';
 
 export default class Entity {
   id = getUid();
@@ -20,5 +21,9 @@ export default class Entity {
 
   getComponent<T extends BaseComponent>(classConstructor: Function): T {
     return this.components.find((c) => c instanceof classConstructor) as T;
+  }
+
+  getTransform() {
+    return this.getComponent<TransformComponent>(TransformComponent);
   }
 }

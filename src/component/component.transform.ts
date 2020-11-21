@@ -26,6 +26,18 @@ export default class TransformComponent extends BaseComponent {
     this.node.scaling = scaling;
   }
 
+  getPosition(): Vector3 {
+    return this.node.position;
+  }
+
+  getRotation(): Vector3 {
+    return this.node.rotation;
+  }
+
+  getScaling(): Vector3 {
+    return this.node.scaling;
+  }
+
   getNode() {
     return this.node;
   }

@@ -1,15 +1,22 @@
 import Entity from '../entity/entity';
+import TransformComponent from './component.transform';
 
 export default class BaseComponent {
-  private entity: Entity;
+  private entity_: Entity;
+  private transform_: TransformComponent;
 
   constructor() {}
 
   attach(entity: Entity) {
-    this.entity = entity;
+    this.entity_ = entity;
+    this.transform_ = entity.getTransform();
   }
 
-  getEntity() {
-    return this.entity;
+  get entity() {
+    return this.entity_;
+  }
+
+  get transform() {
+    return this.transform_;
   }
 }
