@@ -147,86 +147,86 @@ export default class Mesh extends BJSMesh {
   }
 
   // TODO: UV along line
-  pushLine(properties: {
-    coords: { x: number; z: number }[];
-    width: number | LineWidth;
-    color?: Color;
-    closed?: boolean;
-  }) {
-    if (properties.coords.length < 2) {
-      console.warn('Cannot render line with less than 2 coords');
-      return;
+  pushLine(
+    coords: Coords[],
+    width: number | LineWidth,
+    color?: Color,
+    closed?: boolean
+  ) {
+    if (coords.length < 2) {
+      throw new Error('Cannot render line with less than 2 coords');
     }
 
-    let coords = properties.coords;
-    if (properties.closed) {
-      coords = properties.coords.slice();
-      coords.push(properties.coords[0], properties.coords[1]);
-      coords.unshift(properties.coords[properties.coords.length - 1]);
+    let coords_ = coords;
+    if (closed) {
+      coords_ = coords.slice();
+      coords_.push(coords[0], coords[1]);
+      coords_.unshift(coords[coords.length - 1]);
     }
 
-    const color = properties.color || [1, 1, 1, 1];
+    const color_ = color || [1, 1, 1, 1];
     const wLeft =
-      (<LineWidth>properties.width).left !== undefined
-        ? (<LineWidth>properties.width).left
-        : <number>properties.width / 2;
+      (<LineWidth>width).left !== undefined
+        ? (<LineWidth>width).left
+        : <number>width / 2;
     const wRight =
-      (<LineWidth>properties.width).right !== undefined
-        ? (<LineWidth>properties.width).right
-        : <number>properties.width / 2;
+      (<LineWidth>width).right !== undefined
+        ? (<LineWidth>width).right
+        : <number>width / 2;
 
     // loop on vertices to create segments
-    const offset = properties.closed ? 1 : 0;
-    for (let i = offset; i < coords.length - offset; i++) {
-      const current = coords[i];
+    const offset = closed ? 1 : 0;
+    for (let i = offset; i < coords_.length - offset; i++) {
+      const current = coords_[i];
       let normal;
 
       // line start vertices
       if (i === 0) {
-        const next = coords[i + 1];
+        const next = coords_[i + 1];
         normal = new Vector3(
-          -next.z + current.z,
+          -next[2] + current[2],
           0,
-          next.x - current.x
+          next[0] - current[0]
         ).normalize();
-        normal.set(-normal.z, 0, normal.x);
       } else {
-        const previous = coords[i - 1];
+        const previous = coords_[i - 1];
         normal = new Vector3(
-          -current.z + previous.z,
+          -current[2] + previous[2],
           0,
-          current.x - previous.x
+          current[0] - previous[0]
         ).normalize();
-        normal.normalize();
 
         // if not at line end: normal is average of both segments normals
-        if (i < coords.length - 1) {
-          const next = coords[i + 1];
+        if (i < coords_.length - 1) {
+          const next = coords_[i + 1];
           normal.addInPlace(
-            new Vector3(-next.z + current.z, 0, next.x - current.x).normalize()
+            new Vector3(
+              -next[2] + current[2],
+              0,
+              next[0] - current[0]
+            ).normalize()
           );
-          5, 0, 5;
         }
       }
 
       this._setBaseIndex();
       this._pushPositions(
-        current.x + normal.x * wLeft,
-        0,
-        current.z + normal.z * wLeft,
-        current.x - normal.x * wRight,
-        0,
-        current.z - normal.z * wRight
+        current[0] + normal.x * wLeft,
+        current[1],
+        current[2] + normal.z * wLeft,
+        current[0] - normal.x * wRight,
+        current[1],
+        current[2] - normal.z * wRight
       );
       this._pushColors(
-        color[0],
-        color[1],
-        color[2],
-        color[3],
-        color[0],
-        color[1],
-        color[2],
-        color[3]
+        color_[0],
+        color_[1],
+        color_[2],
+        color_[3],
+        color_[0],
+        color_[1],
+        color_[2],
+        color_[3]
       );
       this._pushUVs(0, 0);
 
@@ -239,76 +239,6 @@ export default class Mesh extends BJSMesh {
   }
 
   pushCube(center: Coords, size: [number, number, number], color?: Color) {
-    // const color_ = color;
-    // this._setBaseIndex();
-    // this._pushPositions(
-    //   center[0] - size[0],
-    //   center[1] - size[1],
-    //   center[2] - size[2],
-    //   center[0] + size[0],
-    //   center[1] - size[1],
-    //   center[2] - size[2],
-    //   center[0] + size[0],
-    //   center[1] - size[1],
-    //   center[2] + size[2],
-    //   center[0] - size[0],
-    //   center[1] - size[1],
-    //   center[2] + size[2],
-    //   center[0] - size[0],
-    //   center[1] + size[1],
-    //   center[2] - size[2],
-    //   center[0] + size[0],
-    //   center[1] + size[1],
-    //   center[2] - size[2],
-    //   center[0] + size[0],
-    //   center[1] + size[1],
-    //   center[2] + size[2],
-    //   center[0] - size[0],
-    //   center[1] + size[1],
-    //   center[2] + size[2]
-    // );
-    // this._pushColors(
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3],
-    //   color_[0],
-    //   color_[1],
-    //   color_[2],
-    //   color_[3]
-    // );
-    //
-    // this._pushIndices(0, 2, 1, 0, 3, 2);
-    // this._pushIndices(0, 4, 7, 0, 7, 3);
-    // this._pushIndices(0, 1, 5, 0, 5, 4);
-    // this._pushIndices(1, 2, 6, 1, 6, 5);
-    // this._pushIndices(2, 3, 7, 2, 7, 6);
-    // this._pushIndices(4, 5, 6, 4, 6, 7);
-
     // X+
     this.pushQuad(
       [

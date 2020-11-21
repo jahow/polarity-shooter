@@ -23,7 +23,7 @@ addEntity(new Entity([new TransformComponent(), new GroundMeshComponent()]));
 addEntity(
   new Entity([
     new TransformComponent(
-      new Vector3(-2, 1, 1),
+      new Vector3(-2, 0, 1),
       new Vector3(0, Math.PI / 4, 0)
     ),
     new ActorMeshComponent(),
