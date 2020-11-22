@@ -1,4 +1,7 @@
-import { Engine, Scene, Color4 } from '@babylonjs/core';
+import { Engine } from '@babylonjs/core/Engines/engine';
+import { Scene } from '@babylonjs/core/scene';
+import { Color4 } from '@babylonjs/core/Maths/math.color';
+import '@babylonjs/core/Materials/standardMaterial';
 
 let engine: Engine;
 let canvas: HTMLCanvasElement;

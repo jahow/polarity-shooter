@@ -1,6 +1,15 @@
-import { GlobalInputState, isKeyPressed, KeyCode } from '../utils/input';
+import {
+  GlobalInputState,
+  hasPointerDown,
+  isKeyPressed,
+  KeyCode,
+} from '../utils/input';
 import BaseInputComponent from './component.input.base';
-import { Vector3 } from '@babylonjs/core';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import Entity from '../entity/entity';
+import TransformComponent from './component.transform';
+import BulletMeshComponent from './component.mesh.bullet';
+import { addEntity } from '../app/app';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   private speedVector = Vector3.Zero();
@@ -41,5 +50,17 @@ export default class PlayerInputComponent extends BaseInputComponent {
         0
       )
     );
+
+    // fire bullet
+    if (hasPointerDown(inputState, true)) {
+      const bullet = new Entity([
+        new TransformComponent(
+          this.transform.getPosition(),
+          this.transform.getRotation()
+        ),
+        new BulletMeshComponent(),
+      ]);
+      addEntity(bullet);
+    }
   }
 }

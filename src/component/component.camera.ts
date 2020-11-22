@@ -1,5 +1,6 @@
 import BaseComponent from './component.base';
-import { UniversalCamera, Vector3 } from '@babylonjs/core';
+import { UniversalCamera } from '@babylonjs/core/Cameras/universalCamera';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import Entity from '../entity/entity';
 import { getScene } from '../app/engine';
 

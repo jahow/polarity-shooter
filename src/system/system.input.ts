@@ -40,8 +40,8 @@ export default class InputSystem extends BaseSystem {
     ) => {
       const previousState =
         event.pointerId in this.inputState.pointer
-          ? this.inputState.pointer[event.pointerId].isDown
-          : false;
+          ? this.inputState.pointer[event.pointerId].state
+          : KeyState.RELEASED;
       this.inputState = {
         ...this.inputState,
         pointer: {
@@ -51,17 +51,19 @@ export default class InputSystem extends BaseSystem {
             y: event.clientY,
             deltaX: event.movementX,
             deltaY: event.movementY,
-            isDown: down !== undefined ? down : previousState,
+            state:
+              down === true
+                ? KeyState.FIRST_PRESSED
+                : down === false
+                ? KeyState.RELEASED
+                : previousState,
           },
         },
       };
     };
     window.addEventListener('pointerdown', getPointerEventHandler(true));
-    window.addEventListener('mousedown', getPointerEventHandler(true));
     window.addEventListener('pointerup', getPointerEventHandler(false));
-    window.addEventListener('mouseup', getPointerEventHandler(false));
     window.addEventListener('pointermove', getPointerEventHandler());
-    window.addEventListener('mousemove', getPointerEventHandler());
   }
 
   updateInputState() {
@@ -75,13 +77,17 @@ export default class InputSystem extends BaseSystem {
         newState.keyboard[key] = KeyState.PRESSED;
       }
     });
+    Object.keys(this.inputState.pointer).forEach((key) => {
+      if (this.inputState.pointer[key].state === KeyState.FIRST_PRESSED) {
+        changed = true;
+        newState.pointer[key].state = KeyState.PRESSED;
+      }
+    });
 
     return changed ? newState : this.inputState;
   }
 
   run(allEntities: Entity[]) {
-    this.updateInputState();
-
     for (let entity of allEntities) {
       if (!entity.hasComponent(BaseInputComponent)) continue;
 
@@ -89,6 +95,8 @@ export default class InputSystem extends BaseSystem {
         .getComponent<BaseInputComponent>(BaseInputComponent)
         .receiveInput(this.inputState, this.prevState);
     }
+
+    this.updateInputState();
 
     this.prevState = this.inputState;
   }

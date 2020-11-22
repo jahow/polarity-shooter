@@ -20,7 +20,12 @@ export default class Entity {
   }
 
   getComponent<T extends BaseComponent>(classConstructor: Function): T {
-    return this.components.find((c) => c instanceof classConstructor) as T;
+    for (let i = 0; i < this.components.length; i++) {
+      if (this.components[i] instanceof classConstructor) {
+        return this.components.find((c) => c instanceof classConstructor) as T;
+      }
+    }
+    return null;
   }
 
   getTransform() {

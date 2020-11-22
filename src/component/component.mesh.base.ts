@@ -1,5 +1,5 @@
 import BaseComponent from './component.base';
-import { TransformNode } from '@babylonjs/core';
+import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { getScene } from '../app/engine';
 import Entity from '../entity/entity';
 

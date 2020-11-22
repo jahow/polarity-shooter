@@ -15,7 +15,7 @@ const entities: Entity[] = [];
 const renderSystem = new RenderSystem();
 const inputSystem = new InputSystem();
 
-function addEntity(entity: Entity) {
+export function addEntity(entity: Entity) {
   if (entities.indexOf(entity) > 1) {
     console.warn(`Entity ${entity.getId()} was already added`);
     return;

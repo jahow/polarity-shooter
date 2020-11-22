@@ -1,7 +1,7 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import { Color3, DirectionalLight, Vector3 } from '@babylonjs/core';
-import { initView } from '../app/view';
+import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
+import { Vector3, Color3 } from '@babylonjs/core/Maths';
 import BaseMeshComponent from '../component/component.mesh.base';
 import { getScene } from '../app/engine';
 import CameraComponent from '../component/component.camera';

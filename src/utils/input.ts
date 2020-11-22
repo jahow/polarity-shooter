@@ -115,7 +115,7 @@ export interface PointerState {
   y: number;
   deltaX: number;
   deltaY: number;
-  isDown: boolean;
+  state: KeyState;
 }
 export interface GlobalInputState {
   keyboard: { [key: string]: KeyState };
@@ -134,9 +134,16 @@ export function isKeyPressed(
   );
 }
 
-export function hasPointerDown(state: GlobalInputState) {
+export function hasPointerDown(
+  state: GlobalInputState,
+  firstPressed?: boolean
+) {
   for (const pointerId in state.pointer) {
-    if (state.pointer[pointerId].isDown) return true;
+    if (
+      state.pointer[pointerId].state === KeyState.FIRST_PRESSED ||
+      (state.pointer[pointerId].state === KeyState.PRESSED && !firstPressed)
+    )
+      return true;
   }
   return false;
 }
