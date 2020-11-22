@@ -7,6 +7,7 @@ import TransformComponent from '../component/component.transform';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import InputSystem from '../system/system.input';
 import PlayerInputComponent from '../component/component.input.player';
+import CameraComponent from '../component/component.camera';
 
 initEngine();
 
@@ -23,16 +24,14 @@ function addEntity(entity: Entity) {
 }
 
 addEntity(new Entity([new TransformComponent(), new GroundMeshComponent()]));
-addEntity(
-  new Entity([
-    new TransformComponent(
-      new Vector3(-2, 0, 1),
-      new Vector3(0, Math.PI / 4, 0)
-    ),
-    new ActorMeshComponent(),
-    new PlayerInputComponent(),
-  ])
-);
+
+const player = new Entity([
+  new TransformComponent(new Vector3(-2, 0, 1), new Vector3(0, Math.PI / 4, 0)),
+  new ActorMeshComponent(),
+  new PlayerInputComponent(),
+]);
+addEntity(player);
+addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
 
 export function start() {
   run(() => {

@@ -4,12 +4,11 @@ import { Color3, DirectionalLight, Vector3 } from '@babylonjs/core';
 import { initView } from '../app/view';
 import BaseMeshComponent from '../component/component.mesh.base';
 import { getScene } from '../app/engine';
+import CameraComponent from '../component/component.camera';
 
 export default class RenderSystem extends BaseSystem {
   constructor() {
     super();
-
-    initView();
 
     let light = new DirectionalLight(
       'light',
@@ -26,14 +25,20 @@ export default class RenderSystem extends BaseSystem {
   }
 
   run(allEntities: Entity[]) {
-    // render the meshes
     for (let entity of allEntities) {
-      if (!entity.hasComponent(BaseMeshComponent)) continue;
+      // update mesh
+      if (entity.hasComponent(BaseMeshComponent)) {
+        const component = entity.getComponent<BaseMeshComponent>(
+          BaseMeshComponent
+        );
+        component.updateMesh();
+      }
 
-      const component = entity.getComponent<BaseMeshComponent>(
-        BaseMeshComponent
-      );
-      component.updateMesh();
+      // update camera
+      if (entity.hasComponent(CameraComponent)) {
+        const component = entity.getComponent<CameraComponent>(CameraComponent);
+        component.updateCamera();
+      }
     }
 
     getScene().render();

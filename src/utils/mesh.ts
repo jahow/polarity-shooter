@@ -290,8 +290,8 @@ export default class Mesh extends BJSMesh {
         center[1] - size[1] / 2,
         center[2] + size[2] / 2,
       ],
-      [-size[0], 0, 0],
       [0, 0, -size[2]],
+      [-size[0], 0, 0],
       color
     );
     // Z-
