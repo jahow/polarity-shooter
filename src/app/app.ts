@@ -8,12 +8,14 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import InputSystem from '../system/system.input';
 import PlayerInputComponent from '../component/component.input.player';
 import CameraComponent from '../component/component.camera';
+import LogicSystem from '../system/system.logic';
 
 initEngine();
 
 const entities: Entity[] = [];
 const renderSystem = new RenderSystem();
 const inputSystem = new InputSystem();
+const logicSystem = new LogicSystem();
 
 export function addEntity(entity: Entity) {
   if (entities.indexOf(entity) > 1) {
@@ -36,6 +38,7 @@ addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
 export function start() {
   run(() => {
     inputSystem.run(entities);
+    logicSystem.run(entities);
     renderSystem.run(entities);
   });
 }

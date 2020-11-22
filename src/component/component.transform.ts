@@ -15,15 +15,15 @@ export default class TransformComponent extends BaseComponent {
   }
 
   setPosition(position: Vector3) {
-    this.node.position = position;
+    this.node.position = position.clone();
   }
 
   setRotation(rotation: Vector3) {
-    this.node.rotation = rotation;
+    this.node.rotation = rotation.clone();
   }
 
   setScaling(scaling: Vector3) {
-    this.node.scaling = scaling;
+    this.node.scaling = scaling.clone();
   }
 
   getPosition(): Vector3 {

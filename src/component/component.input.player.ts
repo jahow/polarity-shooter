@@ -10,6 +10,7 @@ import Entity from '../entity/entity';
 import TransformComponent from './component.transform';
 import BulletMeshComponent from './component.mesh.bullet';
 import { addEntity } from '../app/app';
+import BulletLogicComponent from './component.logic.bullet';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   private speedVector = Vector3.Zero();
@@ -59,6 +60,7 @@ export default class PlayerInputComponent extends BaseInputComponent {
           this.transform.getRotation()
         ),
         new BulletMeshComponent(),
+        new BulletLogicComponent(),
       ]);
       addEntity(bullet);
     }
