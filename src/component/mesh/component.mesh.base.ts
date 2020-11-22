@@ -1,7 +1,7 @@
-import BaseComponent from './component.base';
+import BaseComponent from '../component.base';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
-import { getScene } from '../app/engine';
-import Entity from '../entity/entity';
+import { getScene } from '../../app/engine';
+import Entity from '../../entity/entity';
 
 export default class BaseMeshComponent extends BaseComponent {
   mesh: TransformNode;

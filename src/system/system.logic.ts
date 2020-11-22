@@ -1,6 +1,6 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import BaseLogicComponent from '../component/component.logic.base';
+import BaseLogicComponent from '../component/logic/component.logic.base';
 
 export default class LogicSystem extends BaseSystem {
   run(allEntities: Entity[]) {

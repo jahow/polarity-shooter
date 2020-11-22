@@ -3,14 +3,14 @@ import {
   hasPointerDown,
   isKeyPressed,
   KeyCode,
-} from '../utils/input';
+} from '../../utils/input';
 import BaseInputComponent from './component.input.base';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import Entity from '../entity/entity';
-import TransformComponent from './component.transform';
-import BulletMeshComponent from './component.mesh.bullet';
-import { addEntity } from '../app/app';
-import BulletLogicComponent from './component.logic.bullet';
+import Entity from '../../entity/entity';
+import TransformComponent from '../component.transform';
+import BulletMeshComponent from '../mesh/component.mesh.bullet';
+import { addEntity } from '../../app/app';
+import BulletLogicComponent from '../logic/component.logic.bullet';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   private speedVector = Vector3.Zero();

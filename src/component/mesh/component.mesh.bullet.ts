@@ -1,5 +1,5 @@
 import BaseMeshComponent from './component.mesh.base';
-import Mesh from '../utils/mesh';
+import Mesh from '../../utils/mesh';
 
 export default class BulletMeshComponent extends BaseMeshComponent {
   initMesh() {

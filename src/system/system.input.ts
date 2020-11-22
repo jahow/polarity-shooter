@@ -1,7 +1,7 @@
 import Entity from '../entity/entity';
 import BaseSystem from './system.base';
 import { GlobalInputState, isKeyPressed, KeyState } from '../utils/input';
-import BaseInputComponent from '../component/component.input.base';
+import BaseInputComponent from '../component/input/component.input.base';
 
 export default class InputSystem extends BaseSystem {
   prevState: GlobalInputState;
