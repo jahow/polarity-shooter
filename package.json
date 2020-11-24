@@ -6,9 +6,11 @@
   "author": "Olivier Guyot",
   "license": "MIT",
   "dependencies": {
-    "@babylonjs/core": "^4.2.0"
+    "@babylonjs/core": "^4.2.0",
+    "matter-js": "^0.14.2"
   },
   "devDependencies": {
+    "@babylonjs/inspector": "^4.2.0",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.1.2",
     "typescript": "^4.0.5"

@@ -4,7 +4,7 @@ import { getScene } from '../app/engine';
 import BaseComponent from './component.base';
 
 export default class TransformComponent extends BaseComponent {
-  private readonly node;
+  private readonly node: TransformNode;
 
   constructor(position?: Vector3, rotation?: Vector3, scaling?: Vector3) {
     super();
@@ -26,15 +26,15 @@ export default class TransformComponent extends BaseComponent {
     this.node.scaling = scaling.clone();
   }
 
-  getPosition(): Vector3 {
+  getPosition() {
     return this.node.position;
   }
 
-  getRotation(): Vector3 {
+  getRotation() {
     return this.node.rotation;
   }
 
-  getScaling(): Vector3 {
+  getScaling() {
     return this.node.scaling;
   }
 

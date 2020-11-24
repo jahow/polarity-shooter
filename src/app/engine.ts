@@ -3,6 +3,10 @@ import { Scene } from '@babylonjs/core/scene';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import '@babylonjs/core/Materials/standardMaterial';
 
+// uncomment for inspector
+// import '@babylonjs/core/Debug/debugLayer';
+// import '@babylonjs/inspector';
+
 let engine: Engine;
 let canvas: HTMLCanvasElement;
 let scene: Scene;
@@ -18,6 +22,9 @@ export function init() {
 
   scene = new Scene(engine);
   scene.clearColor = new Color4(0.4, 0.4, 0.4, 255);
+
+  // uncomment for inspector
+  // scene.debugLayer.show();
 }
 
 export function run(loopCallback) {
