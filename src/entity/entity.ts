@@ -31,4 +31,10 @@ export default class Entity {
   getTransform() {
     return this.getComponent<TransformComponent>(TransformComponent);
   }
+
+  dispose() {
+    this.components.forEach((comp) => {
+      comp.dispose();
+    });
+  }
 }

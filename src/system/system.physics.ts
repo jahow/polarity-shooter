@@ -1,8 +1,9 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import { Bodies, Body, Engine, Render, World } from 'matter-js';
+import { Bodies, Body, Engine, Render, World, Events } from 'matter-js';
 import PhysicsComponent from '../component/component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import BaseLogicComponent from '../component/logic/component.logic.base';
 
 export enum CollisionGroup {
   ENEMY = 0x00001,
@@ -83,6 +84,22 @@ function vectorFromPhysics(c: { x: number; y: number }, v: Vector3) {
 // run the renderer
 Render.run(render);
 
+// register events
+Events.on(engine, 'collisionStart', function (event) {
+  const pairs = event.pairs;
+
+  // change object colours to show those in an active collision (e.g. resting contact)
+  for (var i = 0; i < pairs.length; i++) {
+    const entityA = pairs[i].bodyA._entity;
+    const entityB = pairs[i].bodyB._entity;
+
+    const logicA = entityA.getComponent<BaseLogicComponent>(BaseLogicComponent);
+    const logicB = entityB.getComponent<BaseLogicComponent>(BaseLogicComponent);
+    if (logicA) logicA.collided(entityB);
+    if (logicB) logicB.collided(entityA);
+  }
+});
+
 const entityBodies: { [id: number]: Object } = {};
 
 function updateEntityBody(entity: Entity) {
@@ -106,6 +123,7 @@ function updateEntityBody(entity: Entity) {
     body.collisionFilter.mask = getCollisionMask(comp.group);
     body.collisionFilter.category = comp.group;
     if (!comp.collides) body.isSensor = true;
+    body._entity = entity;
 
     entityBodies[entity.getId()] = body;
     World.add(engine.world, body);
@@ -122,14 +140,26 @@ function updateEntityBody(entity: Entity) {
   transform.getRotation().y = body.angle;
 }
 
+function clearEntityBody(entityId: number) {
+  let body = entityBodies[entityId];
+  World.remove(engine.world, body, true);
+}
+
 export default class PhysicsSystem extends BaseSystem {
   run(allEntities: Entity[]) {
-    for (let entity of allEntities) {
-      if (!entity.hasComponent(PhysicsComponent)) {
-        continue;
-      }
+    const entities = allEntities.filter((e) =>
+      e.hasComponent(PhysicsComponent)
+    );
+    for (let entity of entities) {
       updateEntityBody(entity);
     }
+
+    // clear entities which don't exist anymore
+    const entityIds = entities.map((e) => e.getId());
+    Object.keys(entityBodies)
+      .map((id) => parseInt(id))
+      .filter((id) => entityIds.indexOf(id) === -1)
+      .forEach((id) => clearEntityBody(id));
 
     Engine.update(engine);
   }

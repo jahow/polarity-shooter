@@ -69,6 +69,4 @@ export default class PhysicsComponent extends BaseComponent {
   isAngleForced() {
     return this.angle_ !== null;
   }
-
-  collided(collider: Entity) {}
 }

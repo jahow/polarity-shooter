@@ -14,6 +14,7 @@ import PhysicsSystem, {
   CollisionGroup,
   ImpostorType,
 } from '../system/system.physics';
+import ActorLogicComponent from '../component/logic/component.logic.actor';
 
 initEngine();
 
@@ -31,6 +32,13 @@ export function addEntity(entity: Entity) {
   entities.push(entity);
 }
 
+export function removeEntity(entity: Entity) {
+  setTimeout(() => {
+    entity.dispose();
+    entities.splice(entities.indexOf(entity), 1);
+  });
+}
+
 addEntity(new Entity([new TransformComponent(), new GroundMeshComponent()]));
 
 const player = new Entity([
@@ -41,6 +49,7 @@ const player = new Entity([
     type: ImpostorType.BOX,
     size: 1,
   }),
+  new ActorLogicComponent(),
 ]);
 addEntity(player);
 addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
@@ -57,6 +66,7 @@ for (let i = 0; i < 4; i++) {
         type: ImpostorType.BOX,
         size: 1,
       }),
+      new ActorLogicComponent(),
     ])
   );
 }

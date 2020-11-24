@@ -24,4 +24,9 @@ export default class BaseMeshComponent extends BaseComponent {
   updateMesh() {
     // do stuff
   }
+
+  dispose() {
+    super.dispose();
+    this.mesh.dispose();
+  }
 }

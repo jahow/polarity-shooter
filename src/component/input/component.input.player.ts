@@ -6,18 +6,16 @@ import {
 } from '../../utils/input';
 import BaseInputComponent from './component.input.base';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import Entity from '../../entity/entity';
-import TransformComponent from '../component.transform';
-import BulletMeshComponent from '../mesh/component.mesh.bullet';
-import { addEntity } from '../../app/app';
-import BulletLogicComponent from '../logic/component.logic.bullet';
 import PhysicsComponent from '../component.physics';
-import { CollisionGroup, ImpostorType } from '../../system/system.physics';
+import ActorLogicComponent from '../logic/component.logic.actor';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   receiveInput(inputState: GlobalInputState, prevState: GlobalInputState) {
     const physics = this.entity.getComponent<PhysicsComponent>(
       PhysicsComponent
+    );
+    const logic = this.entity.getComponent<ActorLogicComponent>(
+      ActorLogicComponent
     );
 
     // speed falloff
@@ -40,33 +38,22 @@ export default class PlayerInputComponent extends BaseInputComponent {
       physics.velocity.normalize();
     }
 
-    // scale
     physics.velocity.scaleInPlace(0.5);
-
-    physics.forceAngle(
-      Vector3.GetAngleBetweenVectors(
-        Vector3.Right(),
-        physics.velocity,
-        Vector3.Up()
-      )
-    );
+    if (physics.velocity.lengthSquared() < 0.001) {
+      physics.velocity = Vector3.Zero();
+    } else {
+      physics.forceAngle(
+        Vector3.GetAngleBetweenVectors(
+          Vector3.Right(),
+          physics.velocity,
+          Vector3.Up()
+        )
+      );
+    }
 
     // fire bullet
     if (hasPointerDown(inputState, true)) {
-      const bullet = new Entity([
-        new TransformComponent(
-          this.transform.getPosition(),
-          this.transform.getRotation()
-        ),
-        new BulletMeshComponent(),
-        new BulletLogicComponent(),
-        new PhysicsComponent(CollisionGroup.PLAYER_BULLET, {
-          type: ImpostorType.CYLINDER,
-          size: 0.3,
-          collides: false,
-        }),
-      ]);
-      addEntity(bullet);
+      logic.fireBullet();
     }
   }
 }

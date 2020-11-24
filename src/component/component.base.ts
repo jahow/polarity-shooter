@@ -12,6 +12,8 @@ export default class BaseComponent {
     this.transform_ = entity.getTransform();
   }
 
+  dispose() {}
+
   get entity() {
     return this.entity_;
   }
