@@ -1,9 +1,10 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import { Bodies, Body, Engine, Render, World, Events } from 'matter-js';
+import { Bodies, Body, Engine, Render, World, Events, Bounds } from 'matter-js';
 import PhysicsComponent from '../component/component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import BaseLogicComponent from '../component/logic/component.logic.base';
+import PlayerInputComponent from '../component/input/component.input.player';
 
 export enum CollisionGroup {
   ENEMY = 0x00001,
@@ -35,13 +36,16 @@ export enum ImpostorType {
 
 export type ImpostorSize = number | [number, number];
 
+const FRICTION_AIR = 0.3;
+const BODY_DENSITY = 0.1;
+
 // this will be used to render a view of the physics scene
-const element = document.getElementById('physics-scene');
+const canvas = document.getElementById('physics-scene');
 
 // matter-js globals
 const engine = Engine.create();
 const render = Render.create({
-  element,
+  canvas,
   engine: engine,
   bounds: {
     min: {
@@ -54,8 +58,8 @@ const render = Render.create({
     },
   },
   options: {
-    width: element.getBoundingClientRect().width,
-    height: element.getBoundingClientRect().height,
+    width: canvas.getBoundingClientRect().width,
+    height: canvas.getBoundingClientRect().height,
     hasBounds: true,
     showVelocity: true,
     showAngleIndicator: true,
@@ -119,7 +123,8 @@ function updateEntityBody(entity: Entity) {
         break;
     }
     Body.setAngle(body, transform.getRotation().y);
-    body.frictionAir = 0.3;
+    body.frictionAir = FRICTION_AIR;
+    body.density = BODY_DENSITY;
     body.collisionFilter.mask = getCollisionMask(comp.group);
     body.collisionFilter.category = comp.group;
     if (!comp.collides) body.isSensor = true;
@@ -138,6 +143,14 @@ function updateEntityBody(entity: Entity) {
   // update mesh
   vectorFromPhysics(body.position, transform.getPosition());
   transform.getRotation().y = body.angle;
+
+  // center on entity if player
+  if (entity.hasComponent(PlayerInputComponent)) {
+    Bounds.shift(render.bounds, {
+      x: body.position.x - 100,
+      y: body.position.y - 100,
+    });
+  }
 }
 
 function clearEntityBody(entityId: number) {
