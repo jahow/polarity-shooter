@@ -33,9 +33,14 @@ export function addEntity(entity: Entity) {
 }
 
 export function removeEntity(entity: Entity) {
+  const index = entities.indexOf(entity);
+  if (index === -1) {
+    throw new Error('entity already disposed: ' + entity.getId());
+  }
+  entities.splice(index, 1);
+
   setTimeout(() => {
     entity.dispose();
-    entities.splice(entities.indexOf(entity), 1);
   });
 }
 
@@ -54,11 +59,11 @@ const player = new Entity([
 addEntity(player);
 addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
 
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 6; i++) {
   addEntity(
     new Entity([
       new TransformComponent(
-        new Vector3(Math.random() * 16 - 8, 0, Math.random() * 16 - 8),
+        new Vector3(Math.random() * 28 - 14, 0, Math.random() * 16 - 8),
         new Vector3(0, Math.random() * Math.PI * 2, 0)
       ),
       new ActorMeshComponent(),
