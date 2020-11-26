@@ -6,6 +6,8 @@ import BaseMeshComponent from '../component/mesh/component.mesh.base';
 import { getScene } from '../app/engine';
 import CameraComponent from '../component/component.camera';
 
+let activeCamera: CameraComponent;
+
 export default class RenderSystem extends BaseSystem {
   constructor() {
     super();
@@ -25,22 +27,31 @@ export default class RenderSystem extends BaseSystem {
   }
 
   run(allEntities: Entity[]) {
+    activeCamera = null;
+
+    // update camera
     for (let entity of allEntities) {
-      // update mesh
+      if (entity.hasComponent(CameraComponent)) {
+        const component = entity.getComponent<CameraComponent>(CameraComponent);
+        activeCamera = component;
+        component.updateCamera();
+      }
+    }
+
+    // update mesh
+    for (let entity of allEntities) {
       if (entity.hasComponent(BaseMeshComponent)) {
         const component = entity.getComponent<BaseMeshComponent>(
           BaseMeshComponent
         );
         component.updateMesh();
       }
-
-      // update camera
-      if (entity.hasComponent(CameraComponent)) {
-        const component = entity.getComponent<CameraComponent>(CameraComponent);
-        component.updateCamera();
-      }
     }
 
     getScene().render();
   }
+}
+
+export function getActiveCamera() {
+  return activeCamera;
 }
