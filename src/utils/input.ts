@@ -1,3 +1,8 @@
+import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera';
+import { getScene } from '../app/engine';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import Mesh from './mesh';
+
 export enum KeyCode {
   AltLeft = 'AltLeft',
   AltRight = 'AltRight',
@@ -149,4 +154,31 @@ export function hasPointerDown(
 }
 export function getFirstPointer(state: GlobalInputState) {
   return state.pointer[Object.keys(state.pointer)[0]];
+}
+
+let pickablePlane;
+
+export function getProjectedPointerPosition(
+  pointer: PointerState,
+  camera: TargetCamera,
+  y: number = 0
+): Vector3 {
+  if (!pickablePlane) {
+    pickablePlane = new Mesh('pickable plane', true)
+      .pushQuad([-1000, 0, -1000], [2000, 0, 0], [0, 0, 2000])
+      .commit();
+    pickablePlane.isVisible = false;
+  }
+
+  pickablePlane.position.x = camera.target.x;
+  pickablePlane.position.y = y;
+  pickablePlane.position.z = camera.target.z;
+  const info = getScene().pick(
+    pointer.x,
+    pointer.y,
+    (mesh) => mesh === pickablePlane,
+    true
+  );
+  if (!info || !info.hit) throw new Error('projecting pointer state failed');
+  return info.pickedPoint;
 }
