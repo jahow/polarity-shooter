@@ -6,6 +6,8 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import BaseLogicComponent from '../component/logic/component.logic.base';
 import PlayerInputComponent from '../component/input/component.input.player';
 
+const RENDER_ENABLED = false;
+
 export enum CollisionGroup {
   ENEMY = 0x00001,
   ENEMY_BULLET = 0x00010,
@@ -39,33 +41,8 @@ export type ImpostorSize = number | [number, number];
 const FRICTION_AIR = 0.3;
 const BODY_DENSITY = 0.1;
 
-// this will be used to render a view of the physics scene
-const canvas = document.getElementById('physics-scene');
-
-// matter-js globals
+// matter-js engine
 const engine = Engine.create();
-const render = Render.create({
-  canvas,
-  engine: engine,
-  bounds: {
-    min: {
-      x: -100,
-      y: -100,
-    },
-    max: {
-      x: 100,
-      y: 100,
-    },
-  },
-  options: {
-    width: canvas.getBoundingClientRect().width,
-    height: canvas.getBoundingClientRect().height,
-    hasBounds: true,
-    showVelocity: true,
-    showAngleIndicator: true,
-  },
-});
-
 engine.world.gravity = {
   x: 0,
   y: 0,
@@ -85,8 +62,34 @@ function vectorFromPhysics(c: { x: number; y: number }, v: Vector3) {
   v.z = -c.y / 10;
 }
 
-// run the renderer
-Render.run(render);
+// configure & run renderer
+const canvas = document.getElementById('physics-scene');
+if (RENDER_ENABLED) {
+  const render = Render.create({
+    canvas,
+    engine: engine,
+    bounds: {
+      min: {
+        x: -100,
+        y: -100,
+      },
+      max: {
+        x: 100,
+        y: 100,
+      },
+    },
+    options: {
+      width: canvas.getBoundingClientRect().width,
+      height: canvas.getBoundingClientRect().height,
+      hasBounds: true,
+      showVelocity: true,
+      showAngleIndicator: true,
+    },
+  });
+  Render.run(render);
+} else {
+  canvas.remove();
+}
 
 // register events
 Events.on(engine, 'collisionStart', function (event) {
@@ -145,7 +148,7 @@ function updateEntityBody(entity: Entity) {
   transform.getRotation().y = body.angle;
 
   // center on entity if player
-  if (entity.hasComponent(PlayerInputComponent)) {
+  if (entity.hasComponent(PlayerInputComponent) && RENDER_ENABLED) {
     Bounds.shift(render.bounds, {
       x: body.position.x - 100,
       y: body.position.y - 100,

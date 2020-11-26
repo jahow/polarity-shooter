@@ -27,8 +27,9 @@ export default class Mesh extends BJSMesh {
   };
   _baseIndex: number;
 
-  constructor(name: string, scene?: Scene) {
+  constructor(name: string, pickable?: boolean, scene?: Scene) {
     super(name, scene || getScene());
+    this.isPickable = !!pickable;
     this._tempArrays = {
       positions: new Array<number>(),
       colors: new Array<number>(),
