@@ -8,7 +8,7 @@ import InputSystem from '../system/system.input';
 import CameraComponent from '../component/component.camera';
 import LogicSystem from '../system/system.logic';
 import PhysicsSystem from '../system/system.physics';
-import { Prefabs } from '../data/actor/prefabs';
+import { Prefabs } from '../data/prefabs';
 
 initEngine();
 

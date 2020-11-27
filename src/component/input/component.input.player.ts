@@ -7,9 +7,8 @@ import {
   KeyCode,
 } from '../../utils/input';
 import BaseInputComponent from './component.input.base';
-import { Vector3, Matrix } from '@babylonjs/core/Maths/math.vector';
+import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import ActorLogicComponent from '../logic/component.logic.actor';
-import { getCanvas, getScene } from '../../app/engine';
 import { getActiveCamera } from '../../system/system.render';
 
 export default class PlayerInputComponent extends BaseInputComponent {
@@ -38,7 +37,7 @@ export default class PlayerInputComponent extends BaseInputComponent {
     if (dir.x || dir.z) logic.moveTowards(dir);
 
     const pointer = getFirstPointer(inputState);
-    if (pointer) {
+    if (pointer && getActiveCamera()) {
       const projected = getProjectedPointerPosition(
         pointer,
         getActiveCamera().camera
@@ -47,7 +46,7 @@ export default class PlayerInputComponent extends BaseInputComponent {
     }
 
     // fire bullet
-    if (hasPointerDown(inputState, true)) {
+    if (hasPointerDown(inputState)) {
       logic.fireBullet();
     }
   }

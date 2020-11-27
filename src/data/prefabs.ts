@@ -1,12 +1,13 @@
-import Entity from '../../entity/entity';
-import TransformComponent from '../../component/component.transform';
+import Entity from '../entity/entity';
+import TransformComponent from '../component/component.transform';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import ActorMeshComponent from '../../component/mesh/component.mesh.actor';
-import PlayerInputComponent from '../../component/input/component.input.player';
-import PhysicsComponent from '../../component/component.physics';
-import { CollisionGroup, ImpostorType } from '../../system/system.physics';
-import ActorLogicComponent from '../../component/logic/component.logic.actor';
-import Mesh from '../../utils/mesh';
+import ActorMeshComponent from '../component/mesh/component.mesh.actor';
+import PlayerInputComponent from '../component/input/component.input.player';
+import PhysicsComponent from '../component/component.physics';
+import { CollisionGroup, ImpostorType } from '../system/system.physics';
+import ActorLogicComponent from '../component/logic/component.logic.actor';
+import Mesh from '../utils/mesh';
+import BulletLogicComponent from '../component/logic/component.logic.bullet';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -58,5 +59,20 @@ export const Prefabs = {
         size: 0.8,
       }),
       new ActorLogicComponent(),
+    ]),
+  Bullet: (pos: Vector3, rotation?: Vector3) =>
+    new Entity([
+      new TransformComponent(pos, rotation),
+      new ActorMeshComponent(() =>
+        new Mesh('[actor] bullet')
+          .pushQuad([-0.9, 0, -0.1], [1, 0, 0], [0, 0, 0.2])
+          .commit()
+      ),
+      new BulletLogicComponent(),
+      new PhysicsComponent(CollisionGroup.PLAYER_BULLET, {
+        type: ImpostorType.CYLINDER,
+        size: 0.3,
+        collides: false,
+      }),
     ]),
 };

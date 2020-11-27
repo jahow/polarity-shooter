@@ -6,7 +6,7 @@ import { removeEntity } from '../../app/app';
 
 export default class BulletLogicComponent extends BaseLogicComponent {
   private speed = 0.8;
-  private maxDist = 10;
+  private maxDist = 16;
   private start: Vector3;
 
   attach(entity: Entity) {

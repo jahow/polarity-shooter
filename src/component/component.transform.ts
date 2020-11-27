@@ -38,6 +38,10 @@ export default class TransformComponent extends BaseComponent {
     return this.node.scaling;
   }
 
+  getHeading() {
+    return this.node.right;
+  }
+
   getNode() {
     return this.node;
   }
