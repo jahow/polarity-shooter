@@ -122,7 +122,7 @@ function updateEntityBody(entity: Entity) {
         body = Bodies.rectangle(pos.x, pos.y, size[0], size[1]);
         break;
       case ImpostorType.CYLINDER:
-        body = Bodies.circle(pos.x, pos.y, size[0]);
+        body = Bodies.circle(pos.x, pos.y, size[0] / 2);
         break;
     }
     Body.setAngle(body, transform.getRotation().y);
