@@ -1,11 +1,11 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import { DirectionalLight } from '@babylonjs/core/Lights/directionalLight';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import BaseMeshComponent from '../component/mesh/component.mesh.base';
 import { getScene } from '../app/engine';
 import CameraComponent from '../component/component.camera';
+import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 
 let activeCamera: CameraComponent;
 
@@ -13,18 +13,11 @@ export default class RenderSystem extends BaseSystem {
   constructor() {
     super();
 
-    let light = new DirectionalLight(
-      'light',
-      new Vector3(-0.2, -1, -0.4),
-      getScene()
-    );
-    light.specular = Color3.Black();
-    let light2 = new DirectionalLight(
-      'light2',
-      new Vector3(0.2, 0.1, 0.4),
-      getScene()
-    );
-    light2.diffuse = new Color3(0.8, 0.6, 0.4);
+    const light = new HemisphericLight('light', Vector3.Up(), getScene());
+    light.diffuse = new Color3(0.8, 0.8, 0.8);
+    light.specular = new Color3(0.1, 0.1, 0.1);
+
+    light.groundColor = new Color3(0.2, 0.05, 0.05);
   }
 
   run(allEntities: Entity[]) {
