@@ -95,7 +95,6 @@ if (RENDER_ENABLED) {
 Events.on(engine, 'collisionStart', function (event) {
   const pairs = event.pairs;
 
-  // change object colours to show those in an active collision (e.g. resting contact)
   for (var i = 0; i < pairs.length; i++) {
     const entityA = pairs[i].bodyA._entity;
     const entityB = pairs[i].bodyB._entity;
@@ -107,6 +106,8 @@ Events.on(engine, 'collisionStart', function (event) {
   }
 });
 
+// this is a map of all physic bodies simulated by matter-js, indexed by entity id
+// (each entity holding a PhysicsComponent will have a body in the simulation)
 const entityBodies: { [id: number]: Object } = {};
 
 function updateEntityBody(entity: Entity) {
@@ -131,13 +132,14 @@ function updateEntityBody(entity: Entity) {
     body.collisionFilter.mask = getCollisionMask(comp.group);
     body.collisionFilter.category = comp.group;
     if (!comp.collides) body.isSensor = true;
+
+    // store the entity on the body for future use
     body._entity = entity;
 
     entityBodies[entity.getId()] = body;
     World.add(engine.world, body);
   }
 
-  // Body.setPosition(body, { x: pos.x, y: -pos.z });
   Body.setVelocity(body, vectorToPhysics(comp.velocity));
   if (comp.isAngleForced()) {
     Body.setAngle(body, comp.angle);
