@@ -1,8 +1,7 @@
 import BaseComponent from '../component.base';
-import { GlobalInputState } from '../../utils/input';
 import Entity from '../../entity/entity';
 
-export default class BaseLogicComponent extends BaseComponent {
+export default class BaseControllerComponent extends BaseComponent {
   preUpdate() {}
   update() {}
   postUpdate() {}

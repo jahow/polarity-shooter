@@ -1,14 +1,14 @@
-import BaseLogicComponent from './component.logic.base';
+import BaseControllerComponent from './component.controller.base';
 import Entity from '../../entity/entity';
 import { addEntity, removeEntity } from '../../app/app';
-import BulletLogicComponent from './component.logic.bullet';
+import BulletControllerComponent from './component.controller.bullet';
 import PhysicsComponent from '../component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Prefabs } from '../../data/prefabs';
 import throttle from 'lodash/throttle';
 import ActorMeshComponent from '../mesh/component.mesh.actor';
 
-export default class ActorLogicComponent extends BaseLogicComponent {
+export default class ActorControllerComponent extends BaseControllerComponent {
   physics: PhysicsComponent;
   mesh: ActorMeshComponent;
   maxSpeed = 0.3;
@@ -48,7 +48,7 @@ export default class ActorLogicComponent extends BaseLogicComponent {
 
   collided(collider: Entity) {
     // bullets kill me
-    if (collider.hasComponent(BulletLogicComponent)) {
+    if (collider.hasComponent(BulletControllerComponent)) {
       removeEntity(this.entity);
     }
   }

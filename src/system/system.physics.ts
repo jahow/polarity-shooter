@@ -3,7 +3,7 @@ import Entity from '../entity/entity';
 import { Bodies, Body, Engine, Render, World, Events, Bounds } from 'matter-js';
 import PhysicsComponent from '../component/component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import BaseLogicComponent from '../component/logic/component.logic.base';
+import BaseControllerComponent from '../component/controller/component.controller.base';
 import PlayerInputComponent from '../component/input/component.input.player';
 
 const RENDER_ENABLED = false;
@@ -99,8 +99,12 @@ Events.on(engine, 'collisionStart', function (event) {
     const entityA = pairs[i].bodyA._entity;
     const entityB = pairs[i].bodyB._entity;
 
-    const logicA = entityA.getComponent<BaseLogicComponent>(BaseLogicComponent);
-    const logicB = entityB.getComponent<BaseLogicComponent>(BaseLogicComponent);
+    const logicA = entityA.getComponent<BaseControllerComponent>(
+      BaseControllerComponent
+    );
+    const logicB = entityB.getComponent<BaseControllerComponent>(
+      BaseControllerComponent
+    );
     if (logicA) logicA.collided(entityB);
     if (logicB) logicB.collided(entityA);
   }

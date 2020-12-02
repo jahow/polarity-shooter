@@ -8,13 +8,13 @@ import {
 } from '../../utils/input';
 import BaseInputComponent from './component.input.base';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import ActorLogicComponent from '../logic/component.logic.actor';
+import ActorControllerComponent from '../controller/component.controller.actor';
 import { getActiveCamera } from '../../system/system.render';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   receiveInput(inputState: GlobalInputState, prevState: GlobalInputState) {
-    const logic = this.entity.getComponent<ActorLogicComponent>(
-      ActorLogicComponent
+    const logic = this.entity.getComponent<ActorControllerComponent>(
+      ActorControllerComponent
     );
 
     // direction vector

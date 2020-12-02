@@ -5,9 +5,9 @@ import ActorMeshComponent from '../component/mesh/component.mesh.actor';
 import PlayerInputComponent from '../component/input/component.input.player';
 import PhysicsComponent from '../component/component.physics';
 import { CollisionGroup, ImpostorType } from '../system/system.physics';
-import ActorLogicComponent from '../component/logic/component.logic.actor';
+import ActorControllerComponent from '../component/controller/component.controller.actor';
 import Mesh from '../utils/mesh';
-import BulletLogicComponent from '../component/logic/component.logic.bullet';
+import BulletControllerComponent from '../component/controller/component.controller.bullet';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -33,7 +33,7 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: [0.8, 0.6],
       }),
-      new ActorLogicComponent(),
+      new ActorControllerComponent(),
     ]),
   Enemy: (pos: Vector3, rotation?: Vector3) =>
     new Entity([
@@ -58,7 +58,7 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: 0.8,
       }),
-      new ActorLogicComponent(),
+      new ActorControllerComponent(),
     ]),
   Bullet: (pos: Vector3, rotation?: Vector3) =>
     new Entity([
@@ -68,7 +68,7 @@ export const Prefabs = {
           .pushQuad([-0.9, 0, -0.1], [1, 0, 0], [0, 0, 0.2])
           .commit()
       ),
-      new BulletLogicComponent(),
+      new BulletControllerComponent(),
       new PhysicsComponent(CollisionGroup.PLAYER_BULLET, {
         type: ImpostorType.CYLINDER,
         size: 0.3,
