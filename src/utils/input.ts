@@ -179,6 +179,6 @@ export function getProjectedPointerPosition(
     (mesh) => mesh === pickablePlane,
     true
   );
-  if (!info || !info.hit) throw new Error('projecting pointer state failed');
+  if (!info || !info.hit) return null;
   return info.pickedPoint;
 }

@@ -42,7 +42,7 @@ export default class PlayerInputComponent extends BaseInputComponent {
         pointer,
         getActiveCamera().camera
       );
-      logic.turnTo(projected);
+      if (projected) logic.turnTo(projected);
     }
 
     // fire bullet

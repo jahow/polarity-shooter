@@ -26,10 +26,10 @@ const player = Prefabs.Player(Vector3.Zero());
 addEntity(player);
 addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
 
-for (let i = 0; i < 6; i++) {
+for (let i = 0; i < 30; i++) {
   addEntity(
     Prefabs.Enemy(
-      new Vector3(Math.random() * 28 - 14, 0, Math.random() * 16 - 8),
+      new Vector3(Math.random() * 80 - 40, 0, Math.random() * 80 - 40),
       new Vector3(0, Math.random() * Math.PI * 2, 0)
     )
   );

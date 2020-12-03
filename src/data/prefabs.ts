@@ -59,7 +59,7 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: 0.8,
       }),
-      new ActorControllerComponent(CollisionGroup.ENEMY_BULLET, 300, 0.3),
+      new ActorControllerComponent(CollisionGroup.ENEMY_BULLET, 300, 0.2),
       new SweepBehaviourComponent(6),
     ]),
   Bullet: (pos: Vector3, rotation?: Vector3) =>
