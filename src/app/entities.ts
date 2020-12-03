@@ -18,9 +18,12 @@ export function addEntity(entity: Entity) {
 
 export function removeEntity(entity: Entity) {
   const index = entities.indexOf(entity);
+
+  // entity was already disposed: do nothing
   if (index === -1) {
-    throw new Error('entity already disposed: ' + entity.id);
+    return;
   }
+
   entities.splice(index, 1);
 
   setTimeout(() => {

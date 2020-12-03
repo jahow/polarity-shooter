@@ -7,14 +7,23 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Prefabs } from '../../data/prefabs';
 import throttle from 'lodash/throttle';
 import ActorMeshComponent from '../mesh/component.mesh.actor';
+import { CollisionGroup } from '../../system/system.physics';
+import PlayerInputComponent from '../input/component.input.player';
 
 export default class ActorControllerComponent extends BaseControllerComponent {
   physics: PhysicsComponent;
   mesh: ActorMeshComponent;
   maxSpeed = 0.3;
-  shotRateLimit = 100;
   targetAngle = 0;
   swayUp = Vector3.Zero();
+
+  constructor(
+    private bulletCollisionGroup: CollisionGroup,
+    private shotRateLimit = 100,
+    private shotSpeed = 0.8
+  ) {
+    super();
+  }
 
   attach(entity: Entity) {
     super.attach(entity);
@@ -48,7 +57,10 @@ export default class ActorControllerComponent extends BaseControllerComponent {
 
   collided(collider: Entity) {
     // bullets kill me
-    if (collider.hasComponent(BulletControllerComponent)) {
+    if (
+      collider.hasComponent(BulletControllerComponent) &&
+      !this.entity.hasComponent(PlayerInputComponent)
+    ) {
       removeEntity(this.entity);
     }
   }
@@ -69,12 +81,25 @@ export default class ActorControllerComponent extends BaseControllerComponent {
     );
   }
 
+  turnTowards(direction: Vector3) {
+    this.targetAngle = Vector3.GetAngleBetweenVectors(
+      Vector3.Right(),
+      direction,
+      Vector3.Up()
+    );
+  }
+
   fireBullet = throttle(
     () => {
       const pos = this.transform
         .getPosition()
         .add(this.mesh.getActorMesh().right.scaleInPlace(0.6));
       const bullet = Prefabs.Bullet(pos, new Vector3(0, this.targetAngle, 0));
+      const bulletPhysics = bullet.getComponent<PhysicsComponent>(
+        PhysicsComponent
+      );
+      bulletPhysics.group = this.bulletCollisionGroup;
+      bulletPhysics.setVelocityMagnitude(this.shotSpeed);
       addEntity(bullet);
     },
     this.shotRateLimit,

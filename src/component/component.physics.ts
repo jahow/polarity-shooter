@@ -33,6 +33,10 @@ export default class PhysicsComponent extends BaseComponent {
     return this.group_;
   }
 
+  set group(group: CollisionGroup) {
+    this.group_ = group;
+  }
+
   get type() {
     return this.impostor.type;
   }
@@ -56,6 +60,10 @@ export default class PhysicsComponent extends BaseComponent {
 
   set velocity(velocity: Vector3) {
     this.velocity_ = velocity;
+  }
+
+  setVelocityMagnitude(value: number) {
+    this.velocity.normalize().scaleInPlace(value);
   }
 
   get angle() {

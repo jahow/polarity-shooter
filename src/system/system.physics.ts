@@ -9,6 +9,7 @@ import PlayerInputComponent from '../component/input/component.input.player';
 const RENDER_ENABLED = false;
 
 export enum CollisionGroup {
+  NONE = 0x00000,
   ENEMY = 0x00001,
   ENEMY_BULLET = 0x00010,
   PLAYER = 0x00100,
@@ -18,6 +19,8 @@ export enum CollisionGroup {
 
 function getCollisionMask(group: CollisionGroup) {
   switch (group) {
+    case CollisionGroup.NONE:
+      return 0x00000;
     case CollisionGroup.ENEMY:
       return 0x11100;
     case CollisionGroup.ENEMY_BULLET:

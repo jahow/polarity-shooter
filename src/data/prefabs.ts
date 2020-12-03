@@ -34,7 +34,7 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: [0.8, 0.6],
       }),
-      new ActorControllerComponent(),
+      new ActorControllerComponent(CollisionGroup.PLAYER_BULLET, 100, 0.8),
     ]),
   Enemy: (pos: Vector3, rotation?: Vector3) =>
     new Entity([
@@ -59,7 +59,7 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: 0.8,
       }),
-      new ActorControllerComponent(),
+      new ActorControllerComponent(CollisionGroup.ENEMY_BULLET, 300, 0.3),
       new SweepBehaviourComponent(6),
     ]),
   Bullet: (pos: Vector3, rotation?: Vector3) =>
@@ -71,7 +71,7 @@ export const Prefabs = {
           .commit()
       ),
       new BulletControllerComponent(),
-      new PhysicsComponent(CollisionGroup.PLAYER_BULLET, {
+      new PhysicsComponent(CollisionGroup.NONE, {
         type: ImpostorType.CYLINDER,
         size: 0.3,
         collides: false,
