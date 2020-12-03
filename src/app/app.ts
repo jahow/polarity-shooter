@@ -9,34 +9,16 @@ import CameraComponent from '../component/component.camera';
 import LogicSystem from '../system/system.logic';
 import PhysicsSystem from '../system/system.physics';
 import { Prefabs } from '../data/prefabs';
+import BehaviorSystem from '../system/system.behavior';
+import { addEntity, getEntities } from './entities';
 
 initEngine();
 
-const entities: Entity[] = [];
 const renderSystem = new RenderSystem();
 const inputSystem = new InputSystem();
 const logicSystem = new LogicSystem();
 const physicsSystem = new PhysicsSystem();
-
-export function addEntity(entity: Entity) {
-  if (entities.indexOf(entity) > 1) {
-    console.warn(`Entity ${entity.getId()} was already added`);
-    return;
-  }
-  entities.push(entity);
-}
-
-export function removeEntity(entity: Entity) {
-  const index = entities.indexOf(entity);
-  if (index === -1) {
-    throw new Error('entity already disposed: ' + entity.getId());
-  }
-  entities.splice(index, 1);
-
-  setTimeout(() => {
-    entity.dispose();
-  });
-}
+const behaviorSystem = new BehaviorSystem();
 
 addEntity(new Entity([new TransformComponent(), new GroundMeshComponent()]));
 
@@ -55,6 +37,8 @@ for (let i = 0; i < 6; i++) {
 
 export function start() {
   run(() => {
+    const entities = getEntities();
+    behaviorSystem.run(entities);
     inputSystem.run(entities);
     physicsSystem.run(entities);
     logicSystem.run(entities);

@@ -1,6 +1,6 @@
 import BaseControllerComponent from './component.controller.base';
 import Entity from '../../entity/entity';
-import { addEntity, removeEntity } from '../../app/app';
+import { addEntity, removeEntity } from '../../app/entities';
 import BulletControllerComponent from './component.controller.bullet';
 import PhysicsComponent from '../component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
@@ -59,7 +59,6 @@ export default class ActorControllerComponent extends BaseControllerComponent {
     if (length > this.maxSpeed) {
       this.physics.velocity.scaleInPlace(this.maxSpeed / length);
     }
-    this.swayAmount += 0.1;
   }
 
   turnTo(point: Vector3) {

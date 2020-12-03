@@ -70,7 +70,7 @@ export default class GroundMeshComponent extends BaseMeshComponent {
     const camera = getActiveCamera();
     if (!camera) return;
 
-    const pos = camera.target.getTransform().getPosition();
+    const pos = camera.target.transform.getPosition();
     this.mesh.position.x =
       Math.floor(pos.x / GROUND_GRID_SIZE) * GROUND_GRID_SIZE;
     this.mesh.position.z =

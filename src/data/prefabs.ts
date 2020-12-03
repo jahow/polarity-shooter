@@ -8,6 +8,7 @@ import { CollisionGroup, ImpostorType } from '../system/system.physics';
 import ActorControllerComponent from '../component/controller/component.controller.actor';
 import Mesh from '../utils/mesh';
 import BulletControllerComponent from '../component/controller/component.controller.bullet';
+import { SweepBehaviourComponent } from '../component/behavior/component.behaviour.sweep';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -59,6 +60,7 @@ export const Prefabs = {
         size: 0.8,
       }),
       new ActorControllerComponent(),
+      new SweepBehaviourComponent(6),
     ]),
   Bullet: (pos: Vector3, rotation?: Vector3) =>
     new Entity([

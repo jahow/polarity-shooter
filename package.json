@@ -18,6 +18,6 @@
   },
   "scripts": {
     "build": "parcel build src/index.html",
-    "dev": "parcel src/index.html"
+    "dev": "parcel src/index.html src/assets/**/*"
   }
 }

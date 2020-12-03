@@ -37,10 +37,9 @@ export default class CameraComponent extends BaseComponent {
   }
 
   updateCamera() {
-    this.camera.position = this.target
-      .getTransform()
+    this.camera.position = this.target.transform
       .getPosition()
       .add(this.position);
-    this.camera.target = this.target.getTransform().getPosition();
+    this.camera.target = this.target.transform.getPosition();
   }
 }

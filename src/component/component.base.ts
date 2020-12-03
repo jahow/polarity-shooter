@@ -9,7 +9,7 @@ export default class BaseComponent {
 
   attach(entity: Entity) {
     this.entity_ = entity;
-    this.transform_ = entity.getTransform();
+    this.transform_ = entity.transform;
   }
 
   dispose() {}

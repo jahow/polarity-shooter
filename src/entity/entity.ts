@@ -3,7 +3,7 @@ import { getUid } from '../utils/uid';
 import TransformComponent from '../component/component.transform';
 
 export default class Entity {
-  id = getUid();
+  id_ = getUid();
 
   constructor(private components: BaseComponent[]) {
     this.components.forEach((comp) => {
@@ -11,8 +11,8 @@ export default class Entity {
     });
   }
 
-  getId() {
-    return this.id;
+  get id() {
+    return this.id_;
   }
 
   hasComponent(classConstructor: Function) {
@@ -28,7 +28,7 @@ export default class Entity {
     return null;
   }
 
-  getTransform() {
+  get transform() {
     return this.getComponent<TransformComponent>(TransformComponent);
   }
 

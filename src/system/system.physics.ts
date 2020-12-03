@@ -116,9 +116,9 @@ const entityBodies: { [id: number]: Object } = {};
 
 function updateEntityBody(entity: Entity) {
   const comp = entity.getComponent<PhysicsComponent>(PhysicsComponent);
-  const transform = entity.getTransform();
+  const transform = entity.transform;
   const pos = vectorToPhysics(transform.getPosition());
-  let body = entityBodies[entity.getId()];
+  let body = entityBodies[entity.id];
 
   if (!body) {
     const size = sizeToPhysics(comp.size);
@@ -140,7 +140,7 @@ function updateEntityBody(entity: Entity) {
     // store the entity on the body for future use
     body._entity = entity;
 
-    entityBodies[entity.getId()] = body;
+    entityBodies[entity.id] = body;
     World.add(engine.world, body);
   }
 
@@ -177,7 +177,7 @@ export default class PhysicsSystem extends BaseSystem {
     }
 
     // clear entities which don't exist anymore
-    const entityIds = entities.map((e) => e.getId());
+    const entityIds = entities.map((e) => e.id);
     Object.keys(entityBodies)
       .map((id) => parseInt(id))
       .filter((id) => entityIds.indexOf(id) === -1)
