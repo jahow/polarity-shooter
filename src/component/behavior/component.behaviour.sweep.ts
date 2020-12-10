@@ -39,7 +39,7 @@ export class SweepBehaviourComponent extends BaseBehaviorComponent {
     this.fireBehavior.direction = diff.scaleInPlace(-1);
     this.fireBehavior.firing =
       this.transform.getPosition().subtract(playerPos).length() <
-      minDistance * 1.4;
+      minDistance * 1.3;
 
     this.movementBehavior.apply(this.controller);
     this.fireBehavior.apply(this.controller);

@@ -9,6 +9,7 @@ import throttle from 'lodash/throttle';
 import ActorMeshComponent from '../mesh/component.mesh.actor';
 import { CollisionGroup } from '../../system/system.physics';
 import PlayerInputComponent from '../input/component.input.player';
+import { Polarity } from '../../utils/polarity';
 
 export default class ActorControllerComponent extends BaseControllerComponent {
   physics: PhysicsComponent;
@@ -16,13 +17,17 @@ export default class ActorControllerComponent extends BaseControllerComponent {
   maxSpeed = 0.3;
   targetAngle = 0;
   swayUp = Vector3.Zero();
+  polarity_: Polarity;
 
   constructor(
     private bulletCollisionGroup: CollisionGroup,
     private shotRateLimit = 100,
-    private shotSpeed = 0.8
+    private shotSpeed = 0.8,
+    polarity?: Polarity
   ) {
     super();
+
+    this.polarity_ = polarity;
   }
 
   attach(entity: Entity) {
@@ -31,6 +36,10 @@ export default class ActorControllerComponent extends BaseControllerComponent {
     this.mesh = this.entity.getComponent<ActorMeshComponent>(
       ActorMeshComponent
     );
+
+    if (this.polarity_ !== undefined) {
+      this.polarity = this.polarity_;
+    }
   }
 
   update() {
@@ -94,7 +103,11 @@ export default class ActorControllerComponent extends BaseControllerComponent {
       const pos = this.transform
         .getPosition()
         .add(this.mesh.getActorMesh().right.scaleInPlace(0.6));
-      const bullet = Prefabs.Bullet(pos, new Vector3(0, this.targetAngle, 0));
+      const bullet = Prefabs.Bullet(
+        pos,
+        new Vector3(0, this.targetAngle, 0),
+        this.polarity
+      );
       const bulletPhysics = bullet.getComponent<PhysicsComponent>(
         PhysicsComponent
       );
@@ -105,4 +118,13 @@ export default class ActorControllerComponent extends BaseControllerComponent {
     this.shotRateLimit,
     { leading: true, trailing: false }
   );
+
+  get polarity() {
+    return this.polarity_;
+  }
+
+  set polarity(value) {
+    this.polarity_ = value;
+    this.mesh.setPolarity(value);
+  }
 }

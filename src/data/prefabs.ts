@@ -9,6 +9,7 @@ import ActorControllerComponent from '../component/controller/component.controll
 import Mesh from '../utils/mesh';
 import BulletControllerComponent from '../component/controller/component.controller.bullet';
 import { SweepBehaviourComponent } from '../component/behavior/component.behaviour.sweep';
+import { Polarity } from '../utils/polarity';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -34,7 +35,12 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: [0.8, 0.6],
       }),
-      new ActorControllerComponent(CollisionGroup.PLAYER_BULLET, 100, 0.8),
+      new ActorControllerComponent(
+        CollisionGroup.PLAYER_BULLET,
+        100,
+        0.8,
+        Polarity.POSITIVE
+      ),
     ]),
   Enemy: (pos: Vector3, rotation?: Vector3) =>
     new Entity([
@@ -59,10 +65,15 @@ export const Prefabs = {
         type: ImpostorType.BOX,
         size: 0.8,
       }),
-      new ActorControllerComponent(CollisionGroup.ENEMY_BULLET, 300, 0.2),
+      new ActorControllerComponent(
+        CollisionGroup.ENEMY_BULLET,
+        300,
+        0.2,
+        Math.random() > 0.5 ? Polarity.NEGATIVE : Polarity.POSITIVE
+      ),
       new SweepBehaviourComponent(6),
     ]),
-  Bullet: (pos: Vector3, rotation?: Vector3) =>
+  Bullet: (pos: Vector3, rotation?: Vector3, polarity?: Polarity) =>
     new Entity([
       new TransformComponent(pos, rotation),
       new ActorMeshComponent(() =>
@@ -70,7 +81,7 @@ export const Prefabs = {
           .pushQuad([-0.9, 0, -0.1], [1, 0, 0], [0, 0, 0.2])
           .commit()
       ),
-      new BulletControllerComponent(),
+      new BulletControllerComponent(polarity),
       new PhysicsComponent(CollisionGroup.NONE, {
         type: ImpostorType.CYLINDER,
         size: 0.3,

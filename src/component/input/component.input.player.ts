@@ -10,6 +10,7 @@ import BaseInputComponent from './component.input.base';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import ActorControllerComponent from '../controller/component.controller.actor';
 import { getActiveCamera } from '../../system/system.render';
+import { opposite } from '../../utils/polarity';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   receiveInput(inputState: GlobalInputState, prevState: GlobalInputState) {
@@ -48,6 +49,10 @@ export default class PlayerInputComponent extends BaseInputComponent {
     // fire bullet
     if (hasPointerDown(inputState)) {
       logic.fireBullet();
+    }
+
+    if (isKeyPressed(inputState, KeyCode.Space, true)) {
+      logic.polarity = opposite(logic.polarity);
     }
   }
 }

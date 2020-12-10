@@ -3,6 +3,7 @@ import { Scene } from '@babylonjs/core/scene';
 import { Color4 } from '@babylonjs/core/Maths/math.color';
 import '@babylonjs/core/Materials/standardMaterial';
 import '@babylonjs/core/Meshes/meshBuilder';
+import '@babylonjs/core/Rendering/outlineRenderer';
 
 // uncomment for inspector
 // import '@babylonjs/core/Debug/debugLayer';
@@ -18,7 +19,7 @@ export function init() {
   canvas.style.height = '100%';
   document.body.appendChild(canvas);
 
-  engine = new Engine(canvas, true);
+  engine = new Engine(canvas, true, { stencil: true });
   engine.setDepthBuffer(true);
 
   scene = new Scene(engine);

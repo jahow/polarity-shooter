@@ -3,13 +3,23 @@ import PhysicsComponent from '../component.physics';
 import Entity from '../../entity/entity';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { removeEntity } from '../../app/entities';
+import { Polarity } from '../../utils/polarity';
+import ActorMeshComponent from '../mesh/component.mesh.actor';
 
 export default class BulletControllerComponent extends BaseControllerComponent {
   private maxDist = 16;
   private start: Vector3;
 
+  constructor(private polarity: Polarity) {
+    super();
+  }
+
   attach(entity: Entity) {
     super.attach(entity);
+
+    this.entity
+      .getComponent<ActorMeshComponent>(ActorMeshComponent)
+      .setPolarity(this.polarity);
 
     this.start = this.transform.getPosition().clone();
 

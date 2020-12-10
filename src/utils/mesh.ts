@@ -36,6 +36,7 @@ export default class Mesh extends BJSMesh {
       uvs: new Array<number>(),
       indices: new Array<number>(),
     };
+    this.renderOverlay = true;
     this.clearVertices();
   }
 
