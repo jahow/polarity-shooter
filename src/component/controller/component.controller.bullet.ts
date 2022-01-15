@@ -10,7 +10,7 @@ export default class BulletControllerComponent extends BaseControllerComponent {
   private maxDist = 16;
   private start: Vector3;
 
-  constructor(private polarity: Polarity) {
+  constructor(private polarity_: Polarity) {
     super();
   }
 
@@ -19,7 +19,7 @@ export default class BulletControllerComponent extends BaseControllerComponent {
 
     this.entity
       .getComponent<ActorMeshComponent>(ActorMeshComponent)
-      .setPolarity(this.polarity);
+      .setPolarity(this.polarity_);
 
     this.start = this.transform.getPosition().clone();
 
@@ -35,5 +35,9 @@ export default class BulletControllerComponent extends BaseControllerComponent {
     ) {
       removeEntity(this.entity);
     }
+  }
+
+  get polarity() {
+    return this.polarity_;
   }
 }

@@ -29,17 +29,25 @@ export class SweepBehaviourComponent extends BaseBehaviorComponent {
 
   updateTasks() {
     const minDistance = this.distanceFromPlayer;
-    const playerPos = getPlayerEntity().transform.getPosition();
-    const diff = this.movementBehavior.center
-      .subtract(playerPos)
-      .normalize()
-      .scaleInPlace(minDistance + this.movementBehavior.radius);
-    this.movementBehavior.center = playerPos.add(diff);
+    const player = getPlayerEntity();
 
-    this.fireBehavior.direction = diff.scaleInPlace(-1);
-    this.fireBehavior.firing =
-      this.transform.getPosition().subtract(playerPos).length() <
-      minDistance * 1.3;
+    if (player) {
+      const playerPos = player.transform.getPosition();
+      const diff = this.movementBehavior.center
+        .subtract(playerPos)
+        .normalize()
+        .scaleInPlace(minDistance + this.movementBehavior.radius);
+      this.movementBehavior.center = playerPos.add(diff);
+
+      this.fireBehavior.direction = diff.scaleInPlace(-1);
+      this.fireBehavior.firing =
+        this.transform.getPosition().subtract(playerPos).length() <
+        minDistance * 1.3;
+    }
+    // player does not exist: keep rotating, do not fire
+    else {
+      this.fireBehavior.firing = false;
+    }
 
     this.movementBehavior.apply(this.controller);
     this.fireBehavior.apply(this.controller);

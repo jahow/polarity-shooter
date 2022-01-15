@@ -31,7 +31,7 @@ export const Prefabs = {
           .commit()
       ),
       new PlayerInputComponent(),
-      new PhysicsComponent(CollisionGroup.PLAYER, {
+      new PhysicsComponent(CollisionGroup.NONE, {
         type: ImpostorType.BOX,
         size: [0.8, 0.6],
       }),

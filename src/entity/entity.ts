@@ -4,6 +4,7 @@ import TransformComponent from '../component/component.transform';
 
 export default class Entity {
   id_ = getUid();
+  disposed_ = false;
 
   constructor(private components: BaseComponent[]) {
     this.components.forEach((comp) => {
@@ -33,8 +34,13 @@ export default class Entity {
   }
 
   dispose() {
+    this.disposed_ = true;
     this.components.forEach((comp) => {
       comp.dispose();
     });
+  }
+
+  get disposed() {
+    return this.disposed_;
   }
 }

@@ -65,12 +65,20 @@ export default class ActorControllerComponent extends BaseControllerComponent {
   }
 
   collided(collider: Entity) {
-    // bullets kill me
-    if (
-      collider.hasComponent(BulletControllerComponent) &&
-      !this.entity.hasComponent(PlayerInputComponent)
-    ) {
-      removeEntity(this.entity);
+    // collider is a bullet
+    if (collider.hasComponent(BulletControllerComponent)) {
+      const samePolarity =
+        collider.getComponent<BulletControllerComponent>(
+          BulletControllerComponent
+        ).polarity === this.polarity;
+
+      // bullets kill enemies disregarding polarity, or player if different polarity
+      if (!this.entity.hasComponent(PlayerInputComponent) || !samePolarity) {
+        removeEntity(this.entity);
+      }
+
+      // remove bullets all the time
+      removeEntity(collider);
     }
   }
 
