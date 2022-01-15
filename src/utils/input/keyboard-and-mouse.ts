@@ -1,7 +1,4 @@
-import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera';
-import { getScene } from '../app/engine';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import Mesh from './mesh';
+import { PointerState } from './model';
 
 export enum KeyCode {
   AltLeft = 'AltLeft',
@@ -110,75 +107,41 @@ export enum KeyCode {
   Tab = 'Tab',
 }
 
-export enum KeyState {
-  RELEASED,
-  PRESSED,
-  FIRST_PRESSED,
-}
-export interface PointerState {
-  x: number;
-  y: number;
-  deltaX: number;
-  deltaY: number;
-  state: KeyState;
-}
-export interface GlobalInputState {
-  keyboard: { [key: string]: KeyState };
-  pointer: { [pointerId: string]: PointerState };
+const keyboardKeys: { [code: KeyCode]: true } = {};
+
+window.addEventListener('keydown', (evt) => {
+  keyboardKeys[evt.code] = true;
+});
+window.addEventListener('keyup', (evt) => {
+  keyboardKeys[evt.code] = false;
+});
+
+export function getKeyboardKeyDown(key: KeyCode) {
+  return !!keyboardKeys[key];
 }
 
-export function isKeyPressed(
-  state: GlobalInputState,
-  key: KeyCode | string,
-  firstPressed?: boolean
-) {
-  const keyState = state.keyboard[key];
-  return (
-    (!firstPressed && keyState === KeyState.PRESSED) ||
-    keyState === KeyState.FIRST_PRESSED
-  );
+let pointerState: PointerState = null;
+let pointerDown = false;
+
+window.addEventListener('pointerdown', (evt) => {
+  pointerDown = true;
+});
+window.addEventListener('pointerup', (evt) => {
+  pointerDown = false;
+});
+window.addEventListener('pointermove', () => (event: PointerEvent) => {
+  pointerState = {
+    x: event.clientX,
+    y: event.clientY,
+    deltaX: event.movementX,
+    deltaY: event.movementY,
+  };
+});
+
+export function getPointerState() {
+  return pointerState;
 }
 
-export function hasPointerDown(
-  state: GlobalInputState,
-  firstPressed?: boolean
-) {
-  for (const pointerId in state.pointer) {
-    if (
-      state.pointer[pointerId].state === KeyState.FIRST_PRESSED ||
-      (state.pointer[pointerId].state === KeyState.PRESSED && !firstPressed)
-    )
-      return true;
-  }
-  return false;
-}
-export function getFirstPointer(state: GlobalInputState) {
-  return state.pointer[Object.keys(state.pointer)[0]];
-}
-
-let pickablePlane;
-
-export function getProjectedPointerPosition(
-  pointer: PointerState,
-  camera: TargetCamera,
-  y: number = 0
-): Vector3 {
-  if (!pickablePlane) {
-    pickablePlane = new Mesh('pickable plane', true)
-      .pushQuad([-1000, 0, -1000], [2000, 0, 0], [0, 0, 2000])
-      .commit();
-    pickablePlane.isVisible = false;
-  }
-
-  pickablePlane.position.x = camera.target.x;
-  pickablePlane.position.y = y;
-  pickablePlane.position.z = camera.target.z;
-  const info = getScene().pick(
-    pointer.x,
-    pointer.y,
-    (mesh) => mesh === pickablePlane,
-    true
-  );
-  if (!info || !info.hit) return null;
-  return info.pickedPoint;
+export function getPointerDown() {
+  return pointerDown;
 }

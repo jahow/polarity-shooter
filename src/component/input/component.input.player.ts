@@ -1,16 +1,14 @@
-import {
-  getFirstPointer,
-  getProjectedPointerPosition,
-  GlobalInputState,
-  hasPointerDown,
-  isKeyPressed,
-  KeyCode,
-} from '../../utils/input';
 import BaseInputComponent from './component.input.base';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import ActorControllerComponent from '../controller/component.controller.actor';
 import { getActiveCamera } from '../../system/system.render';
 import { opposite } from '../../utils/polarity';
+import {
+  getKeyValue,
+  getProjectedPointerPosition,
+  isKeyPressed,
+} from '../../utils/input';
+import { GlobalInputState } from '../../utils/input/model';
 
 export default class PlayerInputComponent extends BaseInputComponent {
   receiveInput(inputState: GlobalInputState, prevState: GlobalInputState) {
@@ -22,36 +20,35 @@ export default class PlayerInputComponent extends BaseInputComponent {
     const dir = Vector3.Zero();
 
     // speed modification from input
-    if (isKeyPressed(inputState, KeyCode.ArrowLeft)) {
-      dir.x -= 1;
+    if (isKeyPressed(inputState, 'left')) {
+      dir.x -= getKeyValue(inputState, 'left');
     }
-    if (isKeyPressed(inputState, KeyCode.ArrowUp)) {
-      dir.z += 1;
+    if (isKeyPressed(inputState, 'up')) {
+      dir.z += getKeyValue(inputState, 'up');
     }
-    if (isKeyPressed(inputState, KeyCode.ArrowRight)) {
-      dir.x += 1;
+    if (isKeyPressed(inputState, 'right')) {
+      dir.x += getKeyValue(inputState, 'right');
     }
-    if (isKeyPressed(inputState, KeyCode.ArrowDown)) {
-      dir.z -= 1;
+    if (isKeyPressed(inputState, 'down')) {
+      dir.z -= getKeyValue(inputState, 'down');
     }
 
     if (dir.x || dir.z) logic.moveTowards(dir);
 
-    const pointer = getFirstPointer(inputState);
-    if (pointer && getActiveCamera()) {
+    if (inputState.pointer && getActiveCamera()) {
       const projected = getProjectedPointerPosition(
-        pointer,
+        inputState,
         getActiveCamera().camera
       );
       if (projected) logic.turnTo(projected);
     }
 
     // fire bullet
-    if (hasPointerDown(inputState)) {
+    if (isKeyPressed(inputState, 'shoot')) {
       logic.fireBullet();
     }
 
-    if (isKeyPressed(inputState, KeyCode.Space, true)) {
+    if (isKeyPressed(inputState, 'switch_polarity', true)) {
       logic.polarity = opposite(logic.polarity);
     }
   }
