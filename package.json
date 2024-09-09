@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "A shooting game",
   "main": "index.js",
-  "author": "Olivier Guyot",
+  "author": "Olivia Guyot",
   "license": "MIT",
   "dependencies": {
     "@babylonjs/core": "^4.2.0",
@@ -12,9 +12,9 @@
   },
   "devDependencies": {
     "@babylonjs/inspector": "^4.2.0",
-    "parcel-bundler": "^1.12.4",
+    "parcel-bundler": "~1.12.5",
     "prettier": "^2.1.2",
-    "typescript": "^4.0.5"
+    "typescript": "~5.6.2"
   },
   "scripts": {
     "build": "parcel build src/index.html",
