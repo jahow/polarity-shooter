@@ -83,11 +83,11 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
           prevState && prevState.keys.right
         ),
         shoot: getKeyState(
-          getActiveControllerAxisValue(5, '+'),
+          getActiveControllerButtonValue(5),
           prevState && prevState.keys.shoot
         ),
         switch_polarity: getKeyState(
-          getActiveControllerButtonValue(5),
+          getActiveControllerButtonValue(4),
           prevState && prevState.keys.switch_polarity
         ),
       },

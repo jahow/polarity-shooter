@@ -1,35 +1,36 @@
 import { AnalogInput } from './model';
 
-const controllers = {};
-let activeController: Gamepad = null;
+const controllers: Set<number> = new Set();
+let activeControllerIndex: number = null;
 
 function connectHandler(e) {
-  controllers[e.gamepad.index] = e.gamepad;
-  if (!activeController) {
-    activeController = e.gamepad;
+  controllers.add(e.gamepad.index);
+  if (activeControllerIndex === null) {
+    activeControllerIndex = e.gamepad.index;
   }
 }
 
 function disconnectHandler(e) {
-  if (e.gamepad === activeController) {
-    activeController = null;
+  if (e.gamepad.index === activeControllerIndex) {
+    activeControllerIndex = null;
   }
-  delete controllers[e.gamepad.index];
+  controllers.delete(e.gamepad.index);
 }
 
 window.addEventListener('gamepadconnected', connectHandler);
 window.addEventListener('gamepaddisconnected', disconnectHandler);
 
 export function hasActiveController() {
-  return !!activeController;
+  return activeControllerIndex !== null;
 }
 
 export function getActiveController() {
-  return activeController;
+  if (!hasActiveController()) return null;
+  return navigator.getGamepads()[activeControllerIndex];
 }
 
 export function getActiveControllerButtonValue(index: number): AnalogInput {
-  const button = activeController.buttons[index];
+  const button = getActiveController().buttons[index];
   if (typeof button !== 'object') return null;
   return button.value;
 }
@@ -38,7 +39,7 @@ export function getActiveControllerAxisValue(
   index: number,
   direction: '+' | '-'
 ): AnalogInput {
-  const axis = activeController.axes[index];
+  const axis = getActiveController().axes[index];
   if (typeof axis !== 'number') return null;
   return direction === '+' ? Math.max(0, axis) : Math.max(0, -axis);
 }
