@@ -11,8 +11,8 @@ import {
 } from './model';
 import {
   getActiveControllerAxisValue,
-  getActiveControllerButtonValue,
-  hasActiveController,
+  getActiveControllerButtonValue, getPointerStateFromAxis,
+  hasActiveController
 } from './controller';
 import {
   getKeyboardKeyDown,
@@ -91,6 +91,7 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
           prevState && prevState.keys.switch_polarity
         ),
       },
+      pointer: getPointerStateFromAxis(2, 3)
     };
   } else {
     return {
@@ -133,6 +134,15 @@ export function getKeysStateChanged(
       newState.keys[curr].value !== oldState.keys[curr].value,
     false
   );
+}
+
+export function getPointerStateChanged(
+  newState: GlobalInputState,
+  oldState: GlobalInputState
+): boolean {
+  if (!newState.pointer && !oldState.pointer) return false;
+  if (!newState.pointer || !oldState.pointer) return true;
+  return oldState.pointer.y !== newState.pointer.y || oldState.pointer.x !== newState.pointer.x || oldState.pointer.deltaX !== newState.pointer.deltaX || oldState.pointer.deltaY !== newState.pointer.deltaY;
 }
 
 let pickablePlane;

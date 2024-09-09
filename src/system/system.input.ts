@@ -1,6 +1,6 @@
 import Entity from '../entity/entity';
 import BaseSystem from './system.base';
-import { getGlobalState, getKeysStateChanged } from '../utils/input';
+import { getGlobalState, getKeysStateChanged, getPointerStateChanged } from '../utils/input';
 import BaseInputComponent from '../component/input/component.input.base';
 import { GlobalInputState } from '../utils/input/model';
 
@@ -17,7 +17,7 @@ export default class InputSystem extends BaseSystem {
   updateInputState() {
     const newState = getGlobalState(this.prevState);
     const changed = this.prevState
-      ? getKeysStateChanged(newState, this.prevState)
+      ? getKeysStateChanged(newState, this.prevState) || getPointerStateChanged(newState, this.prevState)
       : true;
 
     if (changed) {

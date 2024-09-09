@@ -1,4 +1,5 @@
 import { AnalogInput } from './model';
+import { getCanvas } from '../../app/engine';
 
 const controllers: Set<number> = new Set();
 let activeControllerIndex: number = null;
@@ -37,9 +38,25 @@ export function getActiveControllerButtonValue(index: number): AnalogInput {
 
 export function getActiveControllerAxisValue(
   index: number,
-  direction: '+' | '-'
+  direction?: '+' | '-'
 ): AnalogInput {
   const axis = getActiveController().axes[index];
   if (typeof axis !== 'number') return null;
+  if (direction === undefined) return axis;
   return direction === '+' ? Math.max(0, axis) : Math.max(0, -axis);
+}
+
+export function getPointerStateFromAxis(axisX: number, axisY: number) {
+  if (!hasActiveController()) return null;
+  const x = getActiveControllerAxisValue(axisX);
+  const y = getActiveControllerAxisValue(axisY);
+  const canvas = getCanvas()
+  const radius = 100 // we're doing a circle over the center
+  if (Math.abs(x) < 0.1 && Math.abs(y) < 0.1) { return null }
+  return {
+    x: canvas.width / 2 + x * radius,
+    y: canvas.height / 2 + y * radius,
+    deltaX: 0,
+    deltaY: 0,
+  };
 }
