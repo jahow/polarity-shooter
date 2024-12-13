@@ -9,7 +9,7 @@ import { MirrorTexture } from '@babylonjs/core/Materials/Textures/mirrorTexture'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { getActiveCamera } from '../../system/system.render';
 
-const GROUND_SIZE = 40;
+const GROUND_SIZE = 80;
 const GROUND_GRID_SIZE = 4;
 
 export default class GroundMeshComponent extends BaseMeshComponent {

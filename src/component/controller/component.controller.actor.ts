@@ -73,7 +73,7 @@ export default class ActorControllerComponent extends BaseControllerComponent {
         ).polarity === this.polarity;
 
       // bullets kill enemies disregarding polarity, or player if different polarity
-      if (!this.entity.hasComponent(PlayerInputComponent) || !samePolarity) {
+      if (!samePolarity) {
         removeEntity(this.entity);
       }
 
