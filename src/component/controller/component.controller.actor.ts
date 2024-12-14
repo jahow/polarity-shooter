@@ -8,7 +8,6 @@ import { Prefabs } from '../../data/prefabs';
 import throttle from 'lodash/throttle';
 import ActorMeshComponent from '../mesh/component.mesh.actor';
 import { CollisionGroup } from '../../system/system.physics';
-import PlayerInputComponent from '../input/component.input.player';
 import { Polarity } from '../../utils/polarity';
 
 export default class ActorControllerComponent extends BaseControllerComponent {

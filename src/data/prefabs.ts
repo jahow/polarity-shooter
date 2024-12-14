@@ -10,6 +10,7 @@ import Mesh from '../utils/mesh';
 import BulletControllerComponent from '../component/controller/component.controller.bullet';
 import { SweepBehaviourComponent } from '../component/behavior/component.behaviour.sweep';
 import { Polarity } from '../utils/polarity';
+import HaloMeshComponent from '../component/mesh/component.mesh.halo';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -30,6 +31,7 @@ export const Prefabs = {
           .pushCube([-0.25, 0, 0], [0.1, 0.2, 0.1])
           .commit()
       ),
+      new HaloMeshComponent(),
       new PlayerInputComponent(),
       new PhysicsComponent(CollisionGroup.PLAYER, {
         type: ImpostorType.BOX,

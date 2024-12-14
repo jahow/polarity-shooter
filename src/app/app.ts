@@ -24,7 +24,7 @@ addEntity(new Entity([new TransformComponent(), new GroundMeshComponent()]));
 
 const player = Prefabs.Player(Vector3.Zero());
 addEntity(player);
-addEntity(new Entity([new CameraComponent(new Vector3(0, 20, -10), player)]));
+addEntity(new Entity([new CameraComponent(new Vector3(0, 80, -30), player)]));
 
 for (let i = 0; i < 50; i++) {
   addEntity(
