@@ -9,6 +9,8 @@ import throttle from 'lodash/throttle';
 import ActorMeshComponent from '../mesh/component.mesh.actor';
 import { CollisionGroup } from '../../system/system.physics';
 import { Polarity } from '../../utils/polarity';
+import PlayerInputComponent from '../input/component.input.player';
+import HaloMeshComponent from '../mesh/component.mesh.halo';
 
 export default class ActorControllerComponent extends BaseControllerComponent {
   physics: PhysicsComponent;
@@ -61,6 +63,11 @@ export default class ActorControllerComponent extends BaseControllerComponent {
     this.mesh.actorMesh.rotation.z =
       -Math.cos(this.targetAngle) * this.swayUp.z +
       Math.sin(this.targetAngle) * this.swayUp.x;
+
+    if (this.entity.hasComponent(HaloMeshComponent)) {
+      const haloTransform = this.entity.getComponent<HaloMeshComponent>(HaloMeshComponent).mesh.rotation;
+      haloTransform.y += 0.02;
+    }
   }
 
   collided(collider: Entity) {
@@ -72,7 +79,7 @@ export default class ActorControllerComponent extends BaseControllerComponent {
         ).polarity === this.polarity;
 
       // bullets kill enemies disregarding polarity, or player if different polarity
-      if (!samePolarity) {
+      if (!this.entity.hasComponent(PlayerInputComponent) || !samePolarity) {
         removeEntity(this.entity);
       }
 

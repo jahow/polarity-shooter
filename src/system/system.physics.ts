@@ -1,12 +1,12 @@
 import BaseSystem from './system.base';
 import Entity from '../entity/entity';
-import { Bodies, Body, Engine, Render, World, Events, Bounds } from 'matter-js';
+import { Bodies, Body, Bounds, Engine, Events, Render, World } from 'matter-js';
 import PhysicsComponent from '../component/component.physics';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import BaseControllerComponent from '../component/controller/component.controller.base';
 import PlayerInputComponent from '../component/input/component.input.player';
 
-const RENDER_ENABLED = false;
+const RENDER_ENABLED = true;
 
 export enum CollisionGroup {
   NONE = 0x00000,
@@ -46,10 +46,7 @@ const BODY_DENSITY = 0.1;
 
 // matter-js engine
 const engine = Engine.create();
-engine.world.gravity = {
-  x: 0,
-  y: 0,
-};
+engine.gravity = { x: 0, y: 0, scale: 1 };
 
 function vectorToPhysics(v: Vector3) {
   return { x: v.x * 10, y: v.z * -10 };
@@ -67,27 +64,28 @@ function vectorFromPhysics(c: { x: number; y: number }, v: Vector3) {
 
 // configure & run renderer
 const canvas = document.getElementById('physics-scene');
+let render: Render;
 if (RENDER_ENABLED) {
-  const render = Render.create({
+  render = Render.create({
     canvas,
-    engine: engine,
+    engine,
     bounds: {
       min: {
         x: -100,
-        y: -100,
+        y: -100
       },
       max: {
         x: 100,
-        y: 100,
-      },
+        y: 100
+      }
     },
     options: {
       width: canvas.getBoundingClientRect().width,
       height: canvas.getBoundingClientRect().height,
       hasBounds: true,
       showVelocity: true,
-      showAngleIndicator: true,
-    },
+      showAngleIndicator: true
+    }
   });
   Render.run(render);
 } else {
@@ -95,7 +93,7 @@ if (RENDER_ENABLED) {
 }
 
 // register events
-Events.on(engine, 'collisionStart', function (event) {
+Events.on(engine, 'collisionStart', function(event) {
   const pairs = event.pairs;
 
   for (var i = 0; i < pairs.length; i++) {
@@ -121,7 +119,7 @@ function updateEntityBody(entity: Entity) {
   const comp = entity.getComponent<PhysicsComponent>(PhysicsComponent);
   const transform = entity.transform;
   const pos = vectorToPhysics(transform.getPosition());
-  let body = entityBodies[entity.id];
+  let body = entityBodies[entity.id] as Body;
 
   if (!body) {
     const size = sizeToPhysics(comp.size);
@@ -160,7 +158,7 @@ function updateEntityBody(entity: Entity) {
   if (entity.hasComponent(PlayerInputComponent) && RENDER_ENABLED) {
     Bounds.shift(render.bounds, {
       x: body.position.x - 100,
-      y: body.position.y - 100,
+      y: body.position.y - 100
     });
   }
 }

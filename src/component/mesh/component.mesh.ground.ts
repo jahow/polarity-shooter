@@ -8,6 +8,7 @@ import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Texture } from '@babylonjs/core/Materials/Textures/texture';
 import { getActiveCamera } from '../../system/system.render';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
+import { MirrorTexture } from '@babylonjs/core';
 
 const GROUND_SIZE = 80;
 const GROUND_GRID_SIZE = 4;
@@ -24,7 +25,7 @@ export default class GroundMeshComponent extends BaseMeshComponent {
       ),
       updatable: false,
       sourcePlane: Plane.FromPositionAndNormal(Vector3.Zero(), Vector3.Up()),
-      sideOrientation: Mesh.DOUBLESIDE,
+      sideOrientation: Mesh.DOUBLESIDE
     });
 
     ground.position = new Vector3(0, -1, 0);
@@ -36,18 +37,19 @@ export default class GroundMeshComponent extends BaseMeshComponent {
     );
 
     const material = new StandardMaterial('ground mirror', getScene());
-    // material.reflectionTexture = new MirrorTexture(
-    //   'mirror',
-    //   512,
-    //   getScene(),
-    //   true
-    // );
-    // material.reflectionTexture.mirrorPlane = reflector;
-    // material.reflectionTexture.level = 0.4;
-    // material.reflectionTexture.adaptiveBlurKernel = 20;
-    // Object.defineProperty(material.reflectionTexture, 'renderList', {
-    //   get: () => getScene().meshes.filter((m) => m !== ground),
-    // });
+    const mirrorTexture = new MirrorTexture(
+      'mirror',
+      512,
+      getScene(),
+      true
+    );
+    mirrorTexture.mirrorPlane = reflector;
+    mirrorTexture.level = 0.4;
+    mirrorTexture.adaptiveBlurKernel = 20;
+    Object.defineProperty(mirrorTexture, 'renderList', {
+      get: () => getScene().meshes.filter((m) => m !== ground)
+    });
+    material.reflectionTexture = mirrorTexture;
 
     material.ambientTexture = new Texture(
       '/assets/ground_tile.png',

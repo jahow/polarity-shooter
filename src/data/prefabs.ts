@@ -2,7 +2,6 @@ import Entity from '../entity/entity';
 import TransformComponent from '../component/component.transform';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import ActorMeshComponent from '../component/mesh/component.mesh.actor';
-import PlayerInputComponent from '../component/input/component.input.player';
 import PhysicsComponent from '../component/component.physics';
 import { CollisionGroup, ImpostorType } from '../system/system.physics';
 import ActorControllerComponent from '../component/controller/component.controller.actor';
@@ -11,6 +10,7 @@ import BulletControllerComponent from '../component/controller/component.control
 import { SweepBehaviourComponent } from '../component/behavior/component.behaviour.sweep';
 import { Polarity } from '../utils/polarity';
 import HaloMeshComponent from '../component/mesh/component.mesh.halo';
+import PlayerInputComponent from '../component/input/component.input.player';
 
 export const Prefabs = {
   Player: (pos: Vector3, rotation?: Vector3) =>
@@ -35,14 +35,14 @@ export const Prefabs = {
       new PlayerInputComponent(),
       new PhysicsComponent(CollisionGroup.PLAYER, {
         type: ImpostorType.BOX,
-        size: [0.8, 0.6],
+        size: [0.8, 0.6]
       }),
       new ActorControllerComponent(
         CollisionGroup.PLAYER_BULLET,
         100,
         0.8,
         Polarity.POSITIVE
-      ),
+      )
     ]),
   Enemy: (pos: Vector3, rotation?: Vector3) =>
     new Entity([
@@ -65,7 +65,7 @@ export const Prefabs = {
       ),
       new PhysicsComponent(CollisionGroup.ENEMY, {
         type: ImpostorType.BOX,
-        size: 0.8,
+        size: 0.8
       }),
       new ActorControllerComponent(
         CollisionGroup.ENEMY_BULLET,
@@ -73,7 +73,7 @@ export const Prefabs = {
         0.2,
         Math.random() > 0.5 ? Polarity.NEGATIVE : Polarity.POSITIVE
       ),
-      new SweepBehaviourComponent(6),
+      new SweepBehaviourComponent(6)
     ]),
   Bullet: (pos: Vector3, rotation?: Vector3, polarity?: Polarity) =>
     new Entity([
@@ -87,7 +87,7 @@ export const Prefabs = {
       new PhysicsComponent(CollisionGroup.NONE, {
         type: ImpostorType.CYLINDER,
         size: 0.3,
-        collides: false,
-      }),
-    ]),
+        collides: false
+      })
+    ])
 };
