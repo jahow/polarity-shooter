@@ -3,11 +3,7 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import ActorControllerComponent from '../controller/component.controller.actor';
 import { getActiveCamera } from '../../system/system.render';
 import { opposite } from '../../utils/polarity';
-import {
-  getKeyValue,
-  getProjectedPointerPosition,
-  isKeyPressed,
-} from '../../utils/input';
+import { getKeyValue, getProjectedPointerPosition, isKeyPressed } from '../../utils/input';
 import { GlobalInputState } from '../../utils/input/model';
 
 export default class PlayerInputComponent extends BaseInputComponent {

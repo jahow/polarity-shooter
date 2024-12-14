@@ -27,6 +27,9 @@ export default class RenderSystem extends BaseSystem {
     for (let entity of allEntities) {
       if (entity.hasComponent(CameraComponent)) {
         const component = entity.getComponent<CameraComponent>(CameraComponent);
+        if (component.camera !== getScene().activeCamera) {
+          getScene().activeCamera = component.camera;
+        }
         activeCamera = component;
         component.updateCamera();
       }
@@ -41,7 +44,6 @@ export default class RenderSystem extends BaseSystem {
         component.updateMesh();
       }
     }
-
     getScene().render();
   }
 }

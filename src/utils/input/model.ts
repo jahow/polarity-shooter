@@ -18,7 +18,9 @@ export interface KeysState {
   right: KeyState;
   shoot: KeyState;
   switch_polarity: KeyState;
+  resetGame: KeyState;
 }
+
 export type AvailableKeys = keyof KeysState;
 
 export interface PointerState {

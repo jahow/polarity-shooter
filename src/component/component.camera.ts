@@ -9,11 +9,10 @@ export default class CameraComponent extends BaseComponent {
   private target_: Entity;
   private position_: Vector3;
 
-  constructor(position: Vector3, target?: Entity) {
+  constructor(position: Vector3) {
     super();
     this.camera_ = new UniversalCamera('camera', Vector3.Zero(), getScene());
     this.position = position;
-    if (target) this.target = target;
   }
 
   get camera() {

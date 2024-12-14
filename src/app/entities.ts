@@ -8,6 +8,12 @@ export function getEntities() {
   return entities;
 }
 
+export function clearAllEntities() {
+  for (let i = entities.length - 1; i >= 0; i--) {
+    removeEntity(entities[i]);
+  }
+}
+
 export function addEntity(entity: Entity) {
   if (entities.indexOf(entity) > 1) {
     console.warn(`Entity ${entity.id} was already added`);

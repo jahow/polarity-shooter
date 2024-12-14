@@ -2,24 +2,14 @@ import { TargetCamera } from '@babylonjs/core/Cameras/targetCamera';
 import { getScene } from '../../app/engine';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import Mesh from '../mesh';
-import {
-  AnalogInput,
-  AvailableKeys,
-  GlobalInputState,
-  KeyPressedState,
-  KeyState,
-} from './model';
+import { AnalogInput, AvailableKeys, GlobalInputState, KeyPressedState, KeyState } from './model';
 import {
   getActiveControllerAxisValue,
-  getActiveControllerButtonValue, getPointerStateFromAxis,
+  getActiveControllerButtonValue,
+  getPointerStateFromAxis,
   hasActiveController
 } from './controller';
-import {
-  getKeyboardKeyDown,
-  getPointerDown,
-  getPointerState,
-  KeyCode,
-} from './keyboard-and-mouse';
+import { getKeyboardKeyDown, getPointerDown, getPointerState, KeyCode } from './keyboard-and-mouse';
 
 export function isPointerActive(state: GlobalInputState) {
   return !!state.pointer;
@@ -50,6 +40,7 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
       return prevKeyState.state === 'released' ? 'first_pressed' : 'pressed';
     } else return 'released';
   }
+
   function getKeyState(
     value: AnalogInput | boolean,
     prevKeyState?: KeyState
@@ -60,9 +51,10 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
     } else analogValue = value;
     return {
       value: analogValue,
-      state: getKeyPressedState(value, prevKeyState),
+      state: getKeyPressedState(value, prevKeyState)
     };
   }
+
   if (hasActiveController()) {
     return {
       keys: {
@@ -90,6 +82,10 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
           getActiveControllerButtonValue(4),
           prevState && prevState.keys.switch_polarity
         ),
+        resetGame: getKeyState(
+          getActiveControllerButtonValue(9),
+          prevState && prevState.keys.resetGame
+        )
       },
       pointer: getPointerStateFromAxis(2, 3)
     };
@@ -117,8 +113,9 @@ export function getGlobalState(prevState?: GlobalInputState): GlobalInputState {
           getKeyboardKeyDown(KeyCode.Space),
           prevState && prevState.keys.switch_polarity
         ),
+        resetGame: { state: 'released', value: 0 } // no key yet
       },
-      pointer: getPointerState(),
+      pointer: getPointerState()
     };
   }
 }
@@ -146,6 +143,7 @@ export function getPointerStateChanged(
 }
 
 let pickablePlane;
+
 export function getProjectedPointerPosition(
   state: GlobalInputState,
   camera: TargetCamera,
